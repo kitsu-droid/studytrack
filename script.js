@@ -395,7 +395,7 @@ function refreshDashboard() {
 // ===== Add Homework Form (with validation shake) =====
 const homeworkForm = document.getElementById('homework-form');
 
-homeworkForm?.addEventListener('submit', (e) => {
+homeworkForm?.addEventListener('submit', async (e) => {
   e.preventDefault();
 
   const fields = {
@@ -420,16 +420,34 @@ homeworkForm?.addEventListener('submit', (e) => {
 
   if (!isValid) return;
 
-  const newAssignment = {
+  const { data: { user } } = await supabaseClient.auth.getUser();
+  if (!user) {
+    window.location.href = 'login.html';
+    return;
+  }
+
+  const submitBtn = document.getElementById('submit-button');
+  submitBtn.disabled = true;
+  submitBtn.textContent = 'Saving...';
+
+  const { error } = await supabaseClient.from('homework').insert({
+    user_id: user.id,
     title: fields.title.value.trim(),
     subject: fields.subject.value,
-    description: document.getElementById('description').value.trim(),
+    description: document.getElementById('description').value.trim() || null,
     due_at: new Date(`${fields['due-date'].value}T${fields['due-time'].value}`).toISOString(),
-    reminders_enabled: document.getElementById('reminders').checked,
-  };
+  });
 
-  // TODO: replace with a Supabase insert once the database is connected
-  console.log('New assignment:', newAssignment);
+  submitBtn.disabled = false;
+  submitBtn.textContent = 'Add Assignment';
+
+  if (error) {
+    const formError = document.getElementById('form-error');
+    formError.textContent = error.message;
+    formError.hidden = false;
+    return;
+  }
+
   window.location.href = 'index.html';
 });
 
