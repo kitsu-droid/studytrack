@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard | StudyTrack</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+    <!-- Mobile navigation menu -->
+    <aside id="sidebar" aria-label="Main navigation">
+
+        <div class="sidebar-header">
+            <a href="index.html" class="logo">StudyTrack</a>
+            <button type="button" id="close-menu" aria-label="Close navigation menu">
+                &times;
+            </button>
+        </div>
+
+        <nav>
+            <ul>
+                <li><a href="index.html">Home</a></li>
+                <li><a href="dashboard.html" aria-current="page">Dashboard</a></li>
+                <li><a href="add-homework.html">Add Homework</a></li>
+                <li><a href="calendar.html">Calendar</a></li>
+                <li><a href="deadlines.html">Deadline Tracker</a></li>
+                <li><a href="settings.html">Settings</a></li>
+            </ul>
+        </nav>
+
+        <div class="sidebar-footer">
+            <a href="login.html">Log Out</a>
+        </div>
+
+    </aside>
+
+    <div id="menu-overlay" hidden></div>
+
+    <main>
+
+        <header class="topbar">
+            <button
+                type="button"
+                id="open-menu"
+                aria-label="Open navigation menu"
+                aria-controls="sidebar"
+                aria-expanded="false">
+                &#9776;
+            </button>
+
+            <a href="index.html" class="logo">StudyTrack</a>
+
+            <a href="settings.html" class="profile-link">
+                My Profile
+            </a>
+        </header>
+
+        <!-- Page introduction -->
+        <section class="welcome-section">
+            <p>YOUR PROGRESS AT A GLANCE</p>
+            <h1>Dashboard</h1>
+            <p>A summary of how you're keeping up with your homework.</p>
+        </section>
+
+        <!-- Overall progress -->
+        <section class="progress-section">
+            <article class="progress-card">
+                <div class="progress-info">
+                    <h2>Overall Completion</h2>
+                    <p id="progress-label">0 of 0 assignments completed</p>
+                </div>
+
+                <div class="progress-ring-wrap">
+                    <svg class="progress-ring" width="120" height="120" viewBox="0 0 120 120">
+                        <circle class="progress-ring-bg" cx="60" cy="60" r="52" />
+                        <circle id="progress-ring-fill" class="progress-ring-fill" cx="60" cy="60" r="52" />
+                    </svg>
+                    <span id="progress-percent" class="progress-percent">0%</span>
+                </div>
+            </article>
+        </section>
+
+        <!-- Stat summary -->
+        <section class="summary-section" aria-label="Homework summary">
+
+            <article class="summary-card">
+                <h2>Total Assignments</h2>
+                <p id="total-homework">0</p>
+            </article>
+
+            <article class="summary-card">
+                <h2>Pending</h2>
+                <p id="pending-homework">0</p>
+            </article>
+
+            <article class="summary-card">
+                <h2>Missing</h2>
+                <p id="missing-homework">0</p>
+            </article>
+
+            <article class="summary-card">
+                <h2>Completed</h2>
+                <p id="completed-homework">0</p>
+            </article>
+
+        </section>
+
+        <!-- Upcoming deadlines -->
+        <section class="upcoming-section">
+
+            <div class="section-heading">
+                <div>
+                    <h2>Upcoming Deadlines</h2>
+                    <p>Assignments coming up soon.</p>
+                </div>
+
+                <a href="deadlines.html">View All Deadlines</a>
+            </div>
+
+            <div id="upcoming-deadlines">
+                <!-- Populated by script.js -->
+            </div>
+
+            <div id="upcoming-empty-state" hidden>
+                <h3>Nothing due soon</h3>
+                <p>You're all caught up for now.</p>
+            </div>
+
+        </section>
+
+        <!-- Breakdown by subject -->
+        <section class="subject-breakdown-section">
+
+            <div class="section-heading">
+                <div>
+                    <h2>By Subject</h2>
+                    <p>See where most of your homework is coming from.</p>
+                </div>
+            </div>
+
+            <div id="subject-breakdown">
+                <!-- Populated by script.js -->
+            </div>
+
+        </section>
+
+        <footer>
+            <p>&copy; 2026 StudyTrack. Stay organized and keep learning.</p>
+        </footer>
+
+    </main>
+
+    <script src="script.js"></script>
+</body>
+</html>
