@@ -451,15 +451,17 @@ document.addEventListener('DOMContentLoaded', () => {
 // ===== Auth: Login Form =====
 const loginForm = document.getElementById('login-form');
 
-loginForm?.addEventListener('submit', (e) => {
+loginForm?.addEventListener('submit', async (e) => {
   e.preventDefault();
 
   const email = document.getElementById('email');
   const password = document.getElementById('password');
+  const formError = document.getElementById('form-error');
   let isValid = true;
 
   document.querySelectorAll('.field-error').forEach(el => el.hidden = true);
   document.querySelectorAll('.form-group').forEach(el => el.classList.remove('shake'));
+  formError.hidden = true;
 
   if (!email.value.includes('@')) {
     document.getElementById('email-error').hidden = false;
@@ -475,14 +477,31 @@ loginForm?.addEventListener('submit', (e) => {
 
   if (!isValid) return;
 
-  // TODO: replace with supabase.auth.signInWithPassword({ email, password })
-  console.log('Login attempt:', { email: email.value, password: password.value });
+  const submitBtn = document.getElementById('submit-button');
+  submitBtn.disabled = true;
+  submitBtn.textContent = 'Logging in...';
+
+  const { error } = await supabase.auth.signInWithPassword({
+    email: email.value,
+    password: password.value,
+  });
+
+  submitBtn.disabled = false;
+  submitBtn.textContent = 'Log In';
+
+  if (error) {
+    formError.textContent = error.message;
+    formError.hidden = false;
+    return;
+  }
+
+  window.location.href = 'index.html';
 });
 
 // ===== Auth: Register Form =====
 const registerForm = document.getElementById('register-form');
 
-registerForm?.addEventListener('submit', (e) => {
+registerForm?.addEventListener('submit', async (e) => {
   e.preventDefault();
 
   const name = document.getElementById('display-name');
@@ -490,35 +509,33 @@ registerForm?.addEventListener('submit', (e) => {
   const password = document.getElementById('password');
   const confirmPassword = document.getElementById('confirm-password');
   const terms = document.getElementById('terms');
+  const formError = document.getElementById('form-error');
   let isValid = true;
 
   document.querySelectorAll('.field-error').forEach(el => el.hidden = true);
   document.querySelectorAll('.form-group').forEach(el => el.classList.remove('shake'));
+  formError.hidden = true;
 
   if (!name.value.trim()) {
     document.getElementById('display-name-error').hidden = false;
     name.closest('.form-group').classList.add('shake');
     isValid = false;
   }
-
   if (!email.value.includes('@')) {
     document.getElementById('email-error').hidden = false;
     email.closest('.form-group').classList.add('shake');
     isValid = false;
   }
-
   if (password.value.length < 8) {
     document.getElementById('password-error').hidden = false;
     password.closest('.form-group').classList.add('shake');
     isValid = false;
   }
-
   if (confirmPassword.value !== password.value) {
     document.getElementById('confirm-password-error').hidden = false;
     confirmPassword.closest('.form-group').classList.add('shake');
     isValid = false;
   }
-
   if (!terms.checked) {
     document.getElementById('terms-error').hidden = false;
     isValid = false;
@@ -526,12 +543,32 @@ registerForm?.addEventListener('submit', (e) => {
 
   if (!isValid) return;
 
-  // TODO: replace with supabase.auth.signUp({ email, password, options: { data: { display_name: name.value } } })
-  console.log('Register attempt:', {
-    name: name.value,
+  const submitBtn = document.getElementById('submit-button');
+  submitBtn.disabled = true;
+  submitBtn.textContent = 'Creating account...';
+
+  const { error } = await supabase.auth.signUp({
     email: email.value,
     password: password.value,
+    options: {
+      data: { display_name: name.value.trim() },
+    },
   });
+
+  submitBtn.disabled = false;
+  submitBtn.textContent = 'Create Account';
+
+  if (error) {
+    formError.textContent = error.message;
+    formError.hidden = false;
+    return;
+  }
+
+  formError.hidden = false;
+  formError.style.color = 'var(--mint-dark)';
+  formError.style.background = 'var(--mint)';
+  formError.textContent = 'Account created! Check your email to verify, then log in.';
+  registerForm.reset();
 });
 
 // ===== Auth: Reset Password Form =====
