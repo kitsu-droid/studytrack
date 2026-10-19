@@ -963,3 +963,34 @@ confirmDeleteBtn?.addEventListener('click', () => {
   deleteModal.hidden = true;
   window.location.href = 'login.html';
 });
+
+// ===== Route Protection =====
+const PUBLIC_PAGES = ['login.html', 'register.html', 'reset-password.html'];
+
+async function checkAuth() {
+  const currentPage = window.location.pathname.split('/').pop() || 'index.html';
+  const { data: { session } } = await supabase.auth.getSession();
+
+  if (!session && !PUBLIC_PAGES.includes(currentPage)) {
+    window.location.href = 'login.html';
+    return null;
+  }
+
+  if (session && PUBLIC_PAGES.includes(currentPage)) {
+    window.location.href = 'index.html';
+    return session;
+  }
+
+  // Update "My Profile" link with the real user's name if logged in
+  if (session) {
+    const profileLink = document.querySelector('.profile-link');
+    if (profileLink) {
+      const name = session.user.user_metadata?.display_name || session.user.email;
+      profileLink.textContent = name;
+    }
+  }
+
+  return session;
+}
+
+checkAuth();
