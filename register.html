@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sign Up | StudyTrack</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body class="auth-body">
+
+    <main class="auth-main">
+
+        <div class="auth-card">
+
+            <a href="login.html" class="logo auth-logo">StudyTrack</a>
+
+            <h1>Create your account</h1>
+            <p class="auth-subtitle">Start organizing your homework in minutes.</p>
+
+            <form id="register-form" novalidate>
+
+                <div class="form-group">
+                    <label for="display-name">Name</label>
+                    <input
+                        type="text"
+                        id="display-name"
+                        name="display-name"
+                        placeholder="Your name"
+                        required
+                        maxlength="60">
+                    <p class="field-error" id="display-name-error" hidden>Please enter your name.</p>
+                </div>
+
+                <div class="form-group">
+                    <label for="email">Email</label>
+                    <input
+                        type="email"
+                        id="email"
+                        name="email"
+                        placeholder="you@example.com"
+                        required>
+                    <p class="field-error" id="email-error" hidden>Please enter a valid email.</p>
+                </div>
+
+                <div class="form-group">
+                    <label for="password">Password</label>
+                    <input
+                        type="password"
+                        id="password"
+                        name="password"
+                        placeholder="At least 8 characters"
+                        required
+                        minlength="8">
+                    <p class="field-error" id="password-error" hidden>Password must be at least 8 characters.</p>
+                </div>
+
+                <div class="form-group">
+                    <label for="confirm-password">Confirm Password</label>
+                    <input
+                        type="password"
+                        id="confirm-password"
+                        name="confirm-password"
+                        placeholder="Re-enter your password"
+                        required>
+                    <p class="field-error" id="confirm-password-error" hidden>Passwords do not match.</p>
+                </div>
+
+                <div class="form-group checkbox-group">
+                    <input type="checkbox" id="terms" name="terms" required>
+                    <label for="terms">I agree to the Terms of Service and Privacy Policy</label>
+                </div>
+                <p class="field-error" id="terms-error" hidden>You must agree to continue.</p>
+
+                <p class="form-error" id="form-error" hidden></p>
+
+                <button type="submit" class="submit-button auth-submit" id="submit-button">
+                    Create Account
+                </button>
+
+            </form>
+
+            <p class="auth-footer-text">
+                Already have an account? <a href="login.html" class="auth-link">Log in</a>
+            </p>
+
+        </div>
+
+    </main>
+
+    <script src="script.js"></script>
+</body>
+</html>
