@@ -38,14 +38,14 @@ window.addEventListener('resize', () => {
 let cachedHomework = [];
 
 async function fetchHomework() {
-  const { data: { user } } = await supabase.auth.getUser();
+  const { data: { user } } = await supabaseClient.auth.getUser();
 
   if (!user) {
     cachedHomework = [];
     return [];
   }
 
-  const { data, error } = await supabase
+  const { data, error } = await supabaseClient
     .from('homework')
     .select('*')
     .eq('user_id', user.id)
@@ -248,20 +248,6 @@ function renderSubjectBreakdown(items) {
   });
 }
 
-// ===== Extend refreshDashboard to also update dashboard-only widgets =====
-const originalRefreshDashboard = refreshDashboard;
-refreshDashboard = function () {
-  const items = readHomeworkFromDOM();
-  updateMissingStatuses(items);
-  updateSummary(items);
-  updateProgressRing(items);
-  renderUpcomingDeadlines(items);
-  renderSubjectBreakdown(items);
-
-  const activeFilter = document.querySelector('.homework-filters button[aria-pressed="true"]')?.dataset.filter || 'all';
-  if (homeworkListEl) applyFilter(activeFilter, items);
-};
-
 // ===== Pulse helpers (animation triggers) =====
 function pulseBadge(card) {
   const badge = card.querySelector('.status');
@@ -340,7 +326,11 @@ filterButtons.forEach(button => {
     button.setAttribute('aria-pressed', 'true');
 
     const filter = button.dataset.filter;
-    const items = readHomeworkFromDOM();
+    const items = cachedHomework.map(item => ({
+     element: document.querySelector(`.homework-card[data-id="${item.id}"]`),
+     status: item.status,
+     dueDate: item.dueDate,
+    })).filter(i => i.element);
     applyFilter(filter, items);
   });
 });
@@ -481,7 +471,7 @@ loginForm?.addEventListener('submit', async (e) => {
   submitBtn.disabled = true;
   submitBtn.textContent = 'Logging in...';
 
-  const { error } = await supabase.auth.signInWithPassword({
+  const { error } = await supabaseClient.auth.signInWithPassword({
     email: email.value,
     password: password.value,
   });
@@ -547,7 +537,7 @@ registerForm?.addEventListener('submit', async (e) => {
   submitBtn.disabled = true;
   submitBtn.textContent = 'Creating account...';
 
-  const { error } = await supabase.auth.signUp({
+  const { error } = await supabaseClient.auth.signUp({
     email: email.value,
     password: password.value,
     options: {
@@ -595,7 +585,7 @@ resetForm?.addEventListener('submit', async (e) => {
   submitBtn.disabled = true;
   submitBtn.textContent = 'Sending...';
 
-  const { error } = await supabase.auth.resetPasswordForEmail(email.value, {
+  const { error } = await supabaseClient.auth.resetPasswordForEmail(email.value, {
     redirectTo: window.location.origin + '/settings.html',
   });
 
@@ -969,7 +959,7 @@ const PUBLIC_PAGES = ['login.html', 'register.html', 'reset-password.html'];
 
 async function checkAuth() {
   const currentPage = window.location.pathname.split('/').pop() || 'index.html';
-  const { data: { session } } = await supabase.auth.getSession();
+  const { data: { session } } = await supabaseClient.auth.getSession();
 
   if (!session && !PUBLIC_PAGES.includes(currentPage)) {
     window.location.href = 'login.html';
