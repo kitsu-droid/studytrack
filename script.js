@@ -1070,16 +1070,5 @@ async function checkAuth() {
 
   return session;
 }
-  // Update "My Profile" link with the real user's name if logged in
-  if (session) {
-    const profileLink = document.querySelector('.profile-link');
-    if (profileLink) {
-      const name = session.user.user_metadata?.display_name || session.user.email;
-      profileLink.textContent = name;
-    }
-  }
-
-  return session;
-}
 
 checkAuth();
