@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Settings | StudyTrack</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+    <!-- Mobile navigation menu -->
+    <aside id="sidebar" aria-label="Main navigation">
+
+        <div class="sidebar-header">
+            <a href="index.html" class="logo">StudyTrack</a>
+            <button type="button" id="close-menu" aria-label="Close navigation menu">
+                &times;
+            </button>
+        </div>
+
+        <nav>
+            <ul>
+                <li><a href="index.html">Home</a></li>
+                <li><a href="dashboard.html">Dashboard</a></li>
+                <li><a href="add-homework.html">Add Homework</a></li>
+                <li><a href="calendar.html">Calendar</a></li>
+                <li><a href="deadlines.html">Deadline Tracker</a></li>
+                <li><a href="settings.html" aria-current="page">Settings</a></li>
+            </ul>
+        </nav>
+
+        <div class="sidebar-footer">
+            <a href="login.html">Log Out</a>
+        </div>
+
+    </aside>
+
+    <div id="menu-overlay" hidden></div>
+
+    <main>
+
+        <header class="topbar">
+            <button
+                type="button"
+                id="open-menu"
+                aria-label="Open navigation menu"
+                aria-controls="sidebar"
+                aria-expanded="false">
+                &#9776;
+            </button>
+
+            <a href="index.html" class="logo">StudyTrack</a>
+
+            <a href="settings.html" class="profile-link">
+                My Profile
+            </a>
+        </header>
+
+        <!-- Page introduction -->
+        <section class="welcome-section">
+            <p>YOUR ACCOUNT</p>
+            <h1>Settings</h1>
+            <p>Manage your profile, reminders, and account.</p>
+        </section>
+
+        <!-- Profile -->
+        <section class="settings-section">
+            <div class="settings-card">
+                <h2>Profile</h2>
+                <p class="settings-card-subtitle">Your name and timezone, used for reminders and display.</p>
+
+                <form id="profile-form" novalidate>
+
+                    <div class="form-group">
+                        <label for="display-name">Name</label>
+                        <input type="text" id="display-name" name="display-name" maxlength="60" required>
+                        <p class="field-error" id="display-name-error" hidden>Please enter your name.</p>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="email">Email</label>
+                        <input type="email" id="email" name="email" disabled>
+                        <p class="settings-hint">Email can't be changed here. Contact support if needed.</p>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="timezone">Timezone</label>
+                        <select id="timezone" name="timezone" required>
+                            <option value="America/New_York">Eastern Time (US)</option>
+                            <option value="America/Chicago">Central Time (US)</option>
+                            <option value="America/Denver">Mountain Time (US)</option>
+                            <option value="America/Los_Angeles">Pacific Time (US)</option>
+                            <option value="Asia/Manila">Manila (Philippines)</option>
+                            <option value="Asia/Singapore">Singapore</option>
+                            <option value="Europe/London">London</option>
+                            <option value="UTC">UTC</option>
+                        </select>
+                    </div>
+
+                    <p class="settings-success" id="profile-success" hidden>Profile updated.</p>
+
+                    <div class="settings-actions">
+                        <button type="submit" class="submit-button">Save Profile</button>
+                    </div>
+
+                </form>
+            </div>
+        </section>
+
+        <!-- Reminders -->
+        <section class="settings-section">
+            <div class="settings-card">
+                <h2>Email Reminders</h2>
+                <p class="settings-card-subtitle">Get notified one day before and on the day an assignment is due.</p>
+
+                <div class="settings-toggle-row">
+                    <div>
+                        <p class="settings-toggle-label">Enable email reminders</p>
+                        <p class="settings-hint">You can turn this off anytime.</p>
+                    </div>
+
+                    <label class="toggle-switch">
+                        <input type="checkbox" id="reminders-enabled" checked>
+                        <span class="toggle-slider"></span>
+                    </label>
+                </div>
+
+                <p class="settings-success" id="reminders-success" hidden>Reminder settings saved.</p>
+            </div>
+        </section>
+
+        <!-- Change Password -->
+        <section class="settings-section">
+            <div class="settings-card">
+                <h2>Change Password</h2>
+                <p class="settings-card-subtitle">Choose a new password for your account.</p>
+
+                <form id="password-form" novalidate>
+
+                    <div class="form-group">
+                        <label for="current-password">Current Password</label>
+                        <input type="password" id="current-password" name="current-password" required>
+                        <p class="field-error" id="current-password-error" hidden>Please enter your current password.</p>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="new-password">New Password</label>
+                        <input type="password" id="new-password" name="new-password" minlength="8" required>
+                        <p class="field-error" id="new-password-error" hidden>Password must be at least 8 characters.</p>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="confirm-new-password">Confirm New Password</label>
+                        <input type="password" id="confirm-new-password" name="confirm-new-password" required>
+                        <p class="field-error" id="confirm-new-password-error" hidden>Passwords do not match.</p>
+                    </div>
+
+                    <p class="settings-success" id="password-success" hidden>Password updated.</p>
+
+                    <div class="settings-actions">
+                        <button type="submit" class="submit-button">Update Password</button>
+                    </div>
+
+                </form>
+            </div>
+        </section>
+
+        <!-- Delete Account -->
+        <section class="settings-section">
+            <div class="settings-card settings-card-danger">
+                <h2>Delete Account</h2>
+                <p class="settings-card-subtitle">
+                    This permanently deletes your account and all homework data. This cannot be undone.
+                </p>
+
+                <div class="settings-actions">
+                    <button type="button" class="danger-button" id="delete-account-btn">
+                        Delete My Account
+                    </button>
+                </div>
+            </div>
+        </section>
+
+        <!-- Delete confirmation modal -->
+        <div id="delete-modal-overlay" class="modal-overlay" hidden>
+            <div class="modal-card" role="dialog" aria-labelledby="delete-modal-title" aria-modal="true">
+                <h3 id="delete-modal-title">Are you sure?</h3>
+                <p>This will permanently delete your account and all your homework data. Type <strong>DELETE</strong> to confirm.</p>
+
+                <input type="text" id="delete-confirm-input" placeholder="Type DELETE to confirm">
+
+                <div class="modal-actions">
+                    <button type="button" id="cancel-delete-btn" class="cancel-button">Cancel</button>
+                    <button type="button" id="confirm-delete-btn" class="danger-button" disabled>Delete Account</button>
+                </div>
+            </div>
+        </div>
+
+        <footer>
+            <p>&copy; 2026 StudyTrack. Stay organized and keep learning.</p>
+        </footer>
+
+    </main>
+
+    <script src="script.js"></script>
+</body>
+</html>
