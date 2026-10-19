@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Deadline Tracker | StudyTrack</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+    <!-- Mobile navigation menu -->
+    <aside id="sidebar" aria-label="Main navigation">
+
+        <div class="sidebar-header">
+            <a href="index.html" class="logo">StudyTrack</a>
+            <button type="button" id="close-menu" aria-label="Close navigation menu">
+                &times;
+            </button>
+        </div>
+
+        <nav>
+            <ul>
+                <li><a href="index.html">Home</a></li>
+                <li><a href="dashboard.html">Dashboard</a></li>
+                <li><a href="add-homework.html">Add Homework</a></li>
+                <li><a href="calendar.html">Calendar</a></li>
+                <li><a href="deadlines.html" aria-current="page">Deadline Tracker</a></li>
+                <li><a href="settings.html">Settings</a></li>
+            </ul>
+        </nav>
+
+        <div class="sidebar-footer">
+            <a href="login.html">Log Out</a>
+        </div>
+
+    </aside>
+
+    <div id="menu-overlay" hidden></div>
+
+    <main>
+
+        <header class="topbar">
+            <button
+                type="button"
+                id="open-menu"
+                aria-label="Open navigation menu"
+                aria-controls="sidebar"
+                aria-expanded="false">
+                &#9776;
+            </button>
+
+            <a href="index.html" class="logo">StudyTrack</a>
+
+            <a href="settings.html" class="profile-link">
+                My Profile
+            </a>
+        </header>
+
+        <!-- Page introduction -->
+        <section class="welcome-section">
+            <p>STAY ON TOP OF IT</p>
+            <h1>Deadline Tracker</h1>
+            <p>Every assignment, grouped by how soon it's due.</p>
+        </section>
+
+        <!-- Deadline groups -->
+        <section class="deadline-groups-section">
+
+            <div id="group-overdue" class="deadline-group">
+                <h2 class="deadline-group-title overdue">Overdue</h2>
+                <div class="deadline-group-list"></div>
+            </div>
+
+            <div id="group-today" class="deadline-group">
+                <h2 class="deadline-group-title today">Due Today</h2>
+                <div class="deadline-group-list"></div>
+            </div>
+
+            <div id="group-week" class="deadline-group">
+                <h2 class="deadline-group-title week">This Week</h2>
+                <div class="deadline-group-list"></div>
+            </div>
+
+            <div id="group-later" class="deadline-group">
+                <h2 class="deadline-group-title later">Later</h2>
+                <div class="deadline-group-list"></div>
+            </div>
+
+            <div id="deadlines-empty-state" hidden>
+                <h3>Nothing due</h3>
+                <p>You don't have any pending or missing assignments right now.</p>
+                <a href="add-homework.html">Add your first assignment</a>
+            </div>
+
+        </section>
+
+        <!-- Hidden source data: same pattern as calendar.html, replaced by Supabase later -->
+        <div id="homework-source" hidden>
+            <article class="homework-card" data-status="pending">
+                <div class="homework-details">
+                    <p class="subject">Mathematics</p>
+                    <h3>Algebra Worksheet</h3>
+                    <p>Complete exercises 1–20.</p>
+                    <p class="due-date">
+                        Due: <time datetime="2026-10-20">October 20, 2026</time>
+                    </p>
+                </div>
+            </article>
+
+            <article class="homework-card" data-status="completed">
+                <div class="homework-details">
+                    <p class="subject">Science</p>
+                    <h3>Science Research</h3>
+                    <p>Prepare a short report about the solar system.</p>
+                    <p class="due-date">
+                        Due: <time datetime="2026-10-15">October 15, 2026</time>
+                    </p>
+                </div>
+            </article>
+        </div>
+
+        <footer>
+            <p>&copy; 2026 StudyTrack. Stay organized and keep learning.</p>
+        </footer>
+
+    </main>
+
+    <script src="script.js"></script>
+</body>
+</html>
