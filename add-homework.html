@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Add Homework | StudyTrack</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+    <!-- Mobile navigation menu -->
+    <aside id="sidebar" aria-label="Main navigation">
+
+        <div class="sidebar-header">
+            <a href="index.html" class="logo">StudyTrack</a>
+            <button type="button" id="close-menu" aria-label="Close navigation menu">
+                &times;
+            </button>
+        </div>
+
+        <nav>
+            <ul>
+                <li><a href="index.html">Home</a></li>
+                <li><a href="dashboard.html">Dashboard</a></li>
+                <li><a href="add-homework.html" aria-current="page">Add Homework</a></li>
+                <li><a href="calendar.html">Calendar</a></li>
+                <li><a href="deadlines.html">Deadline Tracker</a></li>
+                <li><a href="settings.html">Settings</a></li>
+            </ul>
+        </nav>
+
+        <div class="sidebar-footer">
+            <a href="login.html">Log Out</a>
+        </div>
+
+    </aside>
+
+    <div id="menu-overlay" hidden></div>
+
+    <main>
+
+        <header class="topbar">
+            <button
+                type="button"
+                id="open-menu"
+                aria-label="Open navigation menu"
+                aria-controls="sidebar"
+                aria-expanded="false">
+                &#9776;
+            </button>
+
+            <a href="index.html" class="logo">StudyTrack</a>
+
+            <a href="settings.html" class="profile-link">
+                My Profile
+            </a>
+        </header>
+
+        <!-- Page introduction -->
+        <section class="welcome-section">
+            <p>ADD A NEW TASK</p>
+            <h1 id="form-title">Add Homework</h1>
+            <p>Fill in the details below to add a new assignment to your list.</p>
+        </section>
+
+        <!-- Homework form -->
+        <section class="form-section">
+
+            <form id="homework-form" novalidate>
+
+                <div class="form-group">
+                    <label for="title">Homework Title</label>
+                    <input
+                        type="text"
+                        id="title"
+                        name="title"
+                        placeholder="e.g. Algebra Worksheet"
+                        required
+                        maxlength="120">
+                    <p class="field-error" id="title-error" hidden>Please enter a title.</p>
+                </div>
+
+                <div class="form-group">
+                    <label for="subject">Subject</label>
+                    <select id="subject" name="subject" required>
+                        <option value="" disabled selected>Select a subject</option>
+                        <option value="Mathematics">Mathematics</option>
+                        <option value="Science">Science</option>
+                        <option value="English">English</option>
+                        <option value="History">History</option>
+                        <option value="Art">Art</option>
+                        <option value="Other">Other</option>
+                    </select>
+                    <p class="field-error" id="subject-error" hidden>Please choose a subject.</p>
+                </div>
+
+                <div class="form-group">
+                    <label for="description">
+                        Description or Instructions <span class="optional-label">(optional)</span>
+                    </label>
+                    <textarea
+                        id="description"
+                        name="description"
+                        rows="4"
+                        placeholder="Add any extra details, page numbers, or instructions..."
+                        maxlength="500"></textarea>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="due-date">Due Date</label>
+                        <input
+                            type="date"
+                            id="due-date"
+                            name="due-date"
+                            required>
+                        <p class="field-error" id="due-date-error" hidden>Please select a due date.</p>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="due-time">Due Time</label>
+                        <input
+                            type="time"
+                            id="due-time"
+                            name="due-time"
+                            required>
+                        <p class="field-error" id="due-time-error" hidden>Please select a due time.</p>
+                    </div>
+                </div>
+
+                <div class="form-group checkbox-group">
+                    <input type="checkbox" id="reminders" name="reminders" checked>
+                    <label for="reminders">Send me email reminders for this assignment</label>
+                </div>
+
+                <!-- General error, e.g. for a failed save -->
+                <p class="form-error" id="form-error" hidden></p>
+
+                <div class="form-actions">
+                    <a href="index.html" class="cancel-button">Cancel</a>
+                    <button type="submit" class="submit-button" id="submit-button">
+                        Add Assignment
+                    </button>
+                </div>
+
+            </form>
+
+        </section>
+
+        <footer>
+            <p>&copy; 2026 StudyTrack. Stay organized and keep learning.</p>
+        </footer>
+
+    </main>
+
+    <script src="script.js"></script>
+</body>
+</html>
