@@ -858,7 +858,7 @@ resetForm?.addEventListener('submit', async (e) => {
 // ===== Settings: Profile Form =====
 const profileForm = document.getElementById('profile-form');
 
-profileForm?.addEventListener('submit', (e) => {
+profileForm?.addEventListener('submit', async (e) => {
   e.preventDefault();
 
   const name = document.getElementById('display-name');
@@ -874,8 +874,18 @@ profileForm?.addEventListener('submit', (e) => {
     return;
   }
 
-  // TODO: replace with supabase.from('profiles').update({ display_name: name.value, timezone: timezone.value }).eq('id', userId)
-  console.log('Profile saved:', { name: name.value, timezone: timezone.value });
+  const { data: { user } } = await supabaseClient.auth.getUser();
+  if (!user) return;
+
+  const { error } = await supabaseClient
+    .from('profiles')
+    .update({ display_name: name.value.trim(), timezone: timezone.value })
+    .eq('id', user.id);
+
+  if (error) {
+    console.error('Error updating profile:', error);
+    return;
+  }
 
   successEl.hidden = false;
   setTimeout(() => { successEl.hidden = true; }, 3000);
@@ -884,11 +894,21 @@ profileForm?.addEventListener('submit', (e) => {
 // ===== Settings: Reminders Toggle =====
 const remindersToggle = document.getElementById('reminders-enabled');
 
-remindersToggle?.addEventListener('change', () => {
+remindersToggle?.addEventListener('change', async () => {
   const successEl = document.getElementById('reminders-success');
 
-  // TODO: replace with supabase.from('profiles').update({ reminders_enabled: remindersToggle.checked }).eq('id', userId)
-  console.log('Reminders enabled:', remindersToggle.checked);
+  const { data: { user } } = await supabaseClient.auth.getUser();
+  if (!user) return;
+
+  const { error } = await supabaseClient
+    .from('profiles')
+    .update({ reminders_enabled: remindersToggle.checked })
+    .eq('id', user.id);
+
+  if (error) {
+    console.error('Error updating reminders:', error);
+    return;
+  }
 
   successEl.hidden = false;
   setTimeout(() => { successEl.hidden = true; }, 3000);
@@ -897,7 +917,7 @@ remindersToggle?.addEventListener('change', () => {
 // ===== Settings: Change Password Form =====
 const passwordForm = document.getElementById('password-form');
 
-passwordForm?.addEventListener('submit', (e) => {
+passwordForm?.addEventListener('submit', async (e) => {
   e.preventDefault();
 
   const current = document.getElementById('current-password');
@@ -914,13 +934,11 @@ passwordForm?.addEventListener('submit', (e) => {
     current.closest('.form-group').classList.add('shake');
     isValid = false;
   }
-
   if (newPass.value.length < 8) {
     document.getElementById('new-password-error').hidden = false;
     newPass.closest('.form-group').classList.add('shake');
     isValid = false;
   }
-
   if (confirm.value !== newPass.value) {
     document.getElementById('confirm-new-password-error').hidden = false;
     confirm.closest('.form-group').classList.add('shake');
@@ -929,8 +947,26 @@ passwordForm?.addEventListener('submit', (e) => {
 
   if (!isValid) return;
 
-  // TODO: replace with supabase.auth.updateUser({ password: newPass.value }) after re-verifying current password
-  console.log('Password change requested');
+  // Re-verify current password by attempting a sign-in with it
+  const { data: { user } } = await supabaseClient.auth.getUser();
+  const { error: verifyError } = await supabaseClient.auth.signInWithPassword({
+    email: user.email,
+    password: current.value,
+  });
+
+  if (verifyError) {
+    document.getElementById('current-password-error').textContent = 'Current password is incorrect.';
+    document.getElementById('current-password-error').hidden = false;
+    current.closest('.form-group').classList.add('shake');
+    return;
+  }
+
+  const { error } = await supabaseClient.auth.updateUser({ password: newPass.value });
+
+  if (error) {
+    console.error('Error updating password:', error);
+    return;
+  }
 
   successEl.hidden = false;
   passwordForm.reset();
@@ -963,14 +999,44 @@ deleteConfirmInput?.addEventListener('input', () => {
   confirmDeleteBtn.disabled = deleteConfirmInput.value !== 'DELETE';
 });
 
-confirmDeleteBtn?.addEventListener('click', () => {
-  // TODO: replace with a Supabase Edge Function call that deletes the user's
-  // auth record and cascades deletion of their homework/profile/reminder_logs rows
-  console.log('Account deletion confirmed');
+confirmDeleteBtn?.addEventListener('click', async () => {
+  // Note: full account deletion requires an Edge Function using the service_role
+  // key (regular users can't delete their own auth.users row). This is a
+  // placeholder until that's built — for now it just signs them out.
+  console.log('Account deletion requested — Edge Function not yet implemented');
 
+  await supabaseClient.auth.signOut();
   deleteModal.hidden = true;
   window.location.href = 'login.html';
 });
+
+// ===== Settings: Pre-fill Profile Form =====
+(async function loadProfileSettings() {
+  const nameInput = document.getElementById('display-name');
+  if (!nameInput) return; // not on this page
+
+  const { data: { user } } = await supabaseClient.auth.getUser();
+  if (!user) return;
+
+  document.getElementById('email').value = user.email;
+
+  const { data: profile, error } = await supabaseClient
+    .from('profiles')
+    .select('display_name, timezone, reminders_enabled')
+    .eq('id', user.id)
+    .single();
+
+  if (error) {
+    console.error('Error loading profile:', error);
+    return;
+  }
+
+  nameInput.value = profile.display_name || '';
+  document.getElementById('timezone').value = profile.timezone || 'UTC';
+
+  const remindersToggleEl = document.getElementById('reminders-enabled');
+  if (remindersToggleEl) remindersToggleEl.checked = profile.reminders_enabled;
+})();
 
 // ===== Route Protection =====
 const PUBLIC_PAGES = ['login.html', 'register.html', 'reset-password.html'];
