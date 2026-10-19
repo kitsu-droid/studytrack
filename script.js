@@ -1055,6 +1055,21 @@ async function checkAuth() {
     return session;
   }
 
+  if (session) {
+    const profileLink = document.querySelector('.profile-link');
+    if (profileLink) {
+      const { data: profile } = await supabaseClient
+        .from('profiles')
+        .select('display_name')
+        .eq('id', session.user.id)
+        .single();
+
+      profileLink.textContent = profile?.display_name || session.user.email;
+    }
+  }
+
+  return session;
+}
   // Update "My Profile" link with the real user's name if logged in
   if (session) {
     const profileLink = document.querySelector('.profile-link');
