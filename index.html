@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>StudyTrack | Homework Tracker</title>
+
+    <!-- Your separate CSS file -->
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+    <!-- Mobile navigation menu -->
+    <aside id="sidebar" aria-label="Main navigation">
+
+        <div class="sidebar-header">
+            <a href="index.html" class="logo">StudyTrack</a>
+
+            <!-- JavaScript will make this button close the menu -->
+            <button type="button" id="close-menu" aria-label="Close navigation menu">
+                &times;
+            </button>
+        </div>
+
+        <nav>
+            <ul>
+                <li>
+                    <a href="index.html" aria-current="page">Home</a>
+                </li>
+                <li>
+                    <a href="dashboard.html">Dashboard</a>
+                </li>
+                <li>
+                    <a href="add-homework.html">Add Homework</a>
+                </li>
+                <li>
+                    <a href="calendar.html">Calendar</a>
+                </li>
+                <li>
+                    <a href="deadlines.html">Deadline Tracker</a>
+                </li>
+                <li>
+                    <a href="settings.html">Settings</a>
+                </li>
+            </ul>
+        </nav>
+
+        <div class="sidebar-footer">
+            <a href="login.html">Log Out</a>
+        </div>
+
+    </aside>
+
+    <!-- Optional backdrop behind the sliding menu -->
+    <div id="menu-overlay" hidden></div>
+
+    <!-- Main website content -->
+    <main>
+
+        <!-- Top navigation bar -->
+        <header class="topbar">
+
+            <button
+                type="button"
+                id="open-menu"
+                aria-label="Open navigation menu"
+                aria-controls="sidebar"
+                aria-expanded="false">
+                &#9776;
+            </button>
+
+            <a href="index.html" class="logo">StudyTrack</a>
+
+            <a href="settings.html" class="profile-link">
+                My Profile
+            </a>
+
+        </header>
+
+        <!-- Page introduction -->
+        <section class="welcome-section">
+            <p>YOUR PERSONAL STUDY SPACE</p>
+            <h1>My Homework</h1>
+            <p>Keep track of your assignments and stay on top of your deadlines.</p>
+        </section>
+
+        <!-- Homework summary -->
+        <section class="summary-section" aria-label="Homework summary">
+
+            <article class="summary-card">
+                <h2>Total Homework</h2>
+                <p id="total-homework">0</p>
+            </article>
+
+            <article class="summary-card">
+                <h2>Not Completed</h2>
+                <p id="pending-homework">0</p>
+            </article>
+
+            <article class="summary-card">
+                <h2>Missing</h2>
+                <p id="missing-homework">0</p>
+            </article>
+
+            <article class="summary-card">
+                <h2>Completed</h2>
+                <p id="completed-homework">0</p>
+            </article>
+
+        </section>
+
+        <!-- Homework list and filters -->
+        <section class="homework-section">
+
+            <div class="section-heading">
+                <div>
+                    <h2>My Assignments</h2>
+                    <p>Manage all your homework in one place.</p>
+                </div>
+
+                <a href="add-homework.html" class="add-homework-button">
+                    + Add Homework
+                </a>
+            </div>
+
+            <!-- These buttons will be connected to JavaScript later -->
+            <nav class="homework-filters" aria-label="Filter homework">
+                <button type="button" data-filter="all" aria-pressed="true">
+                    All
+                </button>
+
+                <button type="button" data-filter="pending" aria-pressed="false">
+                    Not Completed
+                </button>
+
+                <button type="button" data-filter="missing" aria-pressed="false">
+                    Missing
+                </button>
+
+                <button type="button" data-filter="completed" aria-pressed="false">
+                    Completed
+                </button>
+
+                <button type="button" data-filter="archive" aria-pressed="false">
+                    Archive
+                </button>
+
+                <button type="button" data-filter="trash" aria-pressed="false">
+                    Trash
+                </button>
+            </nav>
+
+            <!-- Homework items will eventually come from Supabase -->
+            <div id="homework-list">
+
+                <!-- Sample assignment -->
+                <article class="homework-card" data-status="pending">
+
+                    <div class="homework-details">
+                        <p class="subject">Mathematics</p>
+                        <h3>Algebra Worksheet</h3>
+                        <p>Complete exercises 1–20.</p>
+                        <p class="due-date">
+                            Due: <time datetime="2026-10-20">October 20, 2026</time>
+                        </p>
+                    </div>
+
+                    <div class="homework-actions">
+                        <span class="status status-pending">Pending</span>
+
+                        <button type="button" class="edit-homework">
+                            Edit
+                        </button>
+
+                        <button type="button" class="complete-homework">
+                            Mark Completed
+                        </button>
+
+                        <button type="button" class="archive-homework">
+                            Archive
+                        </button>
+
+                        <button type="button" class="delete-homework">
+                            Move to Trash
+                        </button>
+                    </div>
+
+                </article>
+
+                <!-- Sample assignment -->
+                <article class="homework-card" data-status="completed">
+
+                    <div class="homework-details">
+                        <p class="subject">Science</p>
+                        <h3>Science Research</h3>
+                        <p>Prepare a short report about the solar system.</p>
+                        <p class="due-date">
+                            Due: <time datetime="2026-10-15">October 15, 2026</time>
+                        </p>
+                    </div>
+
+                    <div class="homework-actions">
+                        <span class="status status-completed">Completed</span>
+
+                        <button type="button" class="edit-homework">
+                            Edit
+                        </button>
+
+                        <button type="button" class="archive-homework">
+                            Archive
+                        </button>
+
+                        <button type="button" class="delete-homework">
+                            Move to Trash
+                        </button>
+                    </div>
+
+                </article>
+
+            </div>
+
+            <!-- Shown when there are no assignments in the selected filter -->
+            <div id="empty-state" hidden>
+                <h3>No homework found</h3>
+                <p>There are no assignments in this category yet.</p>
+                <a href="add-homework.html">Add your first assignment</a>
+            </div>
+
+        </section>
+
+        <!-- Upcoming deadlines -->
+        <section class="upcoming-section">
+
+            <div class="section-heading">
+                <div>
+                    <h2>Upcoming Deadlines</h2>
+                    <p>Assignments you should work on soon.</p>
+                </div>
+
+                <a href="deadlines.html">View All Deadlines</a>
+            </div>
+
+            <div id="upcoming-deadlines">
+                <!-- Upcoming assignments will be generated here later -->
+            </div>
+
+        </section>
+
+        <footer>
+            <p>&copy; 2026 StudyTrack. Stay organized and keep learning.</p>
+        </footer>
+
+    </main>
+
+    <!-- Your separate JavaScript file -->
+    <script src="script.js"></script>
+
+</body>
+</html>
