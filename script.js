@@ -34,17 +34,93 @@ window.addEventListener('resize', () => {
   }
 });
 
-// ===== Homework Data (temporary, until Supabase is connected) =====
-function readHomeworkFromDOM() {
-  const cards = document.querySelectorAll('.homework-card');
-  return Array.from(cards).map(card => {
-    const dueTime = card.querySelector('.due-date time');
-    return {
-      element: card,
-      status: card.dataset.status,
-      dueDate: dueTime ? new Date(dueTime.getAttribute('datetime')) : null,
-    };
-  });
+// ===== Fetch Homework from Supabase =====
+let cachedHomework = [];
+
+async function fetchHomework() {
+  const { data: { user } } = await supabase.auth.getUser();
+
+  if (!user) {
+    cachedHomework = [];
+    return [];
+  }
+
+  const { data, error } = await supabase
+    .from('homework')
+    .select('*')
+    .eq('user_id', user.id)
+    .order('due_at', { ascending: true });
+
+  if (error) {
+    console.error('Error fetching homework:', error);
+    cachedHomework = [];
+    return [];
+  }
+
+  cachedHomework = data.map(row => ({
+    id: row.id,
+    title: row.title,
+    subject: row.subject,
+    description: row.description,
+    dueDate: new Date(row.due_at),
+    status: getRowStatus(row),
+  }));
+
+  return cachedHomework;
+}
+
+function getRowStatus(row) {
+  if (row.deleted_at) return 'trash';
+  if (row.archived_at) return 'archive';
+  if (row.completed_at) return 'completed';
+  if (new Date(row.due_at) < new Date()) return 'missing';
+  return 'pending';
+}
+
+// ===== Render Homework Cards into the DOM =====
+function renderHomeworkCard(item) {
+  const card = document.createElement('article');
+  card.className = 'homework-card';
+  card.dataset.status = item.status;
+  card.dataset.id = item.id;
+
+  const statusLabel = item.status.charAt(0).toUpperCase() + item.status.slice(1);
+
+  card.innerHTML = `
+    <div class="homework-details">
+      <p class="subject">${item.subject || 'General'}</p>
+      <h3>${item.title}</h3>
+      <p>${item.description || ''}</p>
+      <p class="due-date">
+        Due: <time datetime="${item.dueDate.toISOString()}">${item.dueDate.toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' })}</time>
+      </p>
+    </div>
+    <div class="homework-actions">
+      <span class="status status-${item.status}">${statusLabel}</span>
+      <button type="button" class="edit-homework">Edit</button>
+      ${item.status !== 'completed' ? '<button type="button" class="complete-homework">Mark Completed</button>' : ''}
+      <button type="button" class="archive-homework">Archive</button>
+      <button type="button" class="delete-homework">Move to Trash</button>
+    </div>
+  `;
+
+  return card;
+}
+
+async function loadAndRenderHomework() {
+  if (!homeworkListEl) return; // not on this page
+
+  const items = await fetchHomework();
+
+  homeworkListEl.innerHTML = '';
+  items
+    .filter(i => i.status !== 'trash')
+    .forEach(item => {
+      homeworkListEl.appendChild(renderHomeworkCard(item));
+    });
+
+  attachCardActions();
+  refreshDashboard();
 }
 
 // ===== Determine "Missing" status dynamically =====
@@ -310,12 +386,20 @@ function attachCardActions() {
 
 // ===== Refresh everything after a change =====
 function refreshDashboard() {
-  const items = readHomeworkFromDOM();
+  const items = cachedHomework.map(item => ({
+    element: document.querySelector(`.homework-card[data-id="${item.id}"]`),
+    status: item.status,
+    dueDate: item.dueDate,
+  })).filter(i => i.element); // skip if DOM element not found yet
+
   updateMissingStatuses(items);
   updateSummary(items);
+  updateProgressRing(items);
+  renderUpcomingDeadlines(items);
+  renderSubjectBreakdown(items);
 
   const activeFilter = document.querySelector('.homework-filters button[aria-pressed="true"]')?.dataset.filter || 'all';
-  applyFilter(activeFilter, items);
+  if (homeworkListEl) applyFilter(activeFilter, items);
 }
 
 // ===== Add Homework Form (with validation shake) =====
@@ -361,8 +445,7 @@ homeworkForm?.addEventListener('submit', (e) => {
 
 // ===== Init =====
 document.addEventListener('DOMContentLoaded', () => {
-  attachCardActions();
-  refreshDashboard();
+  loadAndRenderHomework();
 });
 
 // ===== Auth: Login Form =====
