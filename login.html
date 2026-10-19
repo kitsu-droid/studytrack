@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Log In | StudyTrack</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body class="auth-body">
+
+    <main class="auth-main">
+
+        <div class="auth-card">
+
+            <a href="login.html" class="logo auth-logo">StudyTrack</a>
+
+            <h1>Welcome back</h1>
+            <p class="auth-subtitle">Log in to keep track of your homework.</p>
+
+            <form id="login-form" novalidate>
+
+                <div class="form-group">
+                    <label for="email">Email</label>
+                    <input
+                        type="email"
+                        id="email"
+                        name="email"
+                        placeholder="you@example.com"
+                        required>
+                    <p class="field-error" id="email-error" hidden>Please enter a valid email.</p>
+                </div>
+
+                <div class="form-group">
+                    <label for="password">Password</label>
+                    <input
+                        type="password"
+                        id="password"
+                        name="password"
+                        placeholder="Enter your password"
+                        required>
+                    <p class="field-error" id="password-error" hidden>Please enter your password.</p>
+                </div>
+
+                <div class="auth-row">
+                    <label class="checkbox-inline">
+                        <input type="checkbox" id="remember-me">
+                        Remember me
+                    </label>
+                    <a href="reset-password.html" class="auth-link">Forgot password?</a>
+                </div>
+
+                <p class="form-error" id="form-error" hidden></p>
+
+                <button type="submit" class="submit-button auth-submit" id="submit-button">
+                    Log In
+                </button>
+
+            </form>
+
+            <p class="auth-footer-text">
+                Don't have an account? <a href="register.html" class="auth-link">Sign up</a>
+            </p>
+
+        </div>
+
+    </main>
+
+    <script src="script.js"></script>
+</body>
+</html>
