@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Calendar | StudyTrack</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+    <!-- Mobile navigation menu -->
+    <aside id="sidebar" aria-label="Main navigation">
+
+        <div class="sidebar-header">
+            <a href="index.html" class="logo">StudyTrack</a>
+            <button type="button" id="close-menu" aria-label="Close navigation menu">
+                &times;
+            </button>
+        </div>
+
+        <nav>
+            <ul>
+                <li><a href="index.html">Home</a></li>
+                <li><a href="dashboard.html">Dashboard</a></li>
+                <li><a href="add-homework.html">Add Homework</a></li>
+                <li><a href="calendar.html" aria-current="page">Calendar</a></li>
+                <li><a href="deadlines.html">Deadline Tracker</a></li>
+                <li><a href="settings.html">Settings</a></li>
+            </ul>
+        </nav>
+
+        <div class="sidebar-footer">
+            <a href="login.html">Log Out</a>
+        </div>
+
+    </aside>
+
+    <div id="menu-overlay" hidden></div>
+
+    <main>
+
+        <header class="topbar">
+            <button
+                type="button"
+                id="open-menu"
+                aria-label="Open navigation menu"
+                aria-controls="sidebar"
+                aria-expanded="false">
+                &#9776;
+            </button>
+
+            <a href="index.html" class="logo">StudyTrack</a>
+
+            <a href="settings.html" class="profile-link">
+                My Profile
+            </a>
+        </header>
+
+        <!-- Page introduction -->
+        <section class="welcome-section">
+            <p>PLAN AHEAD</p>
+            <h1>Calendar</h1>
+            <p>See all your assignments laid out by due date.</p>
+        </section>
+
+        <!-- Calendar navigation -->
+        <section class="calendar-section">
+
+            <div class="calendar-header">
+                <button type="button" id="prev-month" aria-label="Previous month">
+                    &#8249;
+                </button>
+
+                <h2 id="calendar-month-label">October 2026</h2>
+
+                <button type="button" id="next-month" aria-label="Next month">
+                    &#8250;
+                </button>
+            </div>
+
+            <div class="calendar-weekdays">
+                <span>Sun</span>
+                <span>Mon</span>
+                <span>Tue</span>
+                <span>Wed</span>
+                <span>Thu</span>
+                <span>Fri</span>
+                <span>Sat</span>
+            </div>
+
+            <div id="calendar-grid" class="calendar-grid">
+                <!-- Populated by script.js -->
+            </div>
+
+        </section>
+
+        <!-- Selected date detail panel -->
+        <section class="selected-date-section">
+
+            <div class="section-heading">
+                <div>
+                    <h2 id="selected-date-label">Today</h2>
+                    <p>Assignments due on this date.</p>
+                </div>
+
+                <a href="add-homework.html" class="add-homework-button">
+                    + Add Homework
+                </a>
+            </div>
+
+            <div id="selected-date-list">
+                <!-- Populated by script.js -->
+            </div>
+
+            <div id="selected-date-empty" hidden>
+                <h3>No homework due</h3>
+                <p>Nothing scheduled for this date.</p>
+            </div>
+
+        </section>
+
+        <!-- Hidden source data: same pattern as index.html, replaced by Supabase later -->
+        <div id="homework-source" hidden>
+            <article class="homework-card" data-status="pending">
+                <div class="homework-details">
+                    <p class="subject">Mathematics</p>
+                    <h3>Algebra Worksheet</h3>
+                    <p>Complete exercises 1–20.</p>
+                    <p class="due-date">
+                        Due: <time datetime="2026-10-20">October 20, 2026</time>
+                    </p>
+                </div>
+            </article>
+
+            <article class="homework-card" data-status="completed">
+                <div class="homework-details">
+                    <p class="subject">Science</p>
+                    <h3>Science Research</h3>
+                    <p>Prepare a short report about the solar system.</p>
+                    <p class="due-date">
+                        Due: <time datetime="2026-10-15">October 15, 2026</time>
+                    </p>
+                </div>
+            </article>
+        </div>
+
+        <footer>
+            <p>&copy; 2026 StudyTrack. Stay organized and keep learning.</p>
+        </footer>
+
+    </main>
+
+    <script src="script.js"></script>
+</body>
+</html>
