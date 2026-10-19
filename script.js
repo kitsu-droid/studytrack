@@ -574,7 +574,7 @@ registerForm?.addEventListener('submit', async (e) => {
 // ===== Auth: Reset Password Form =====
 const resetForm = document.getElementById('reset-form');
 
-resetForm?.addEventListener('submit', (e) => {
+resetForm?.addEventListener('submit', async (e) => {
   e.preventDefault();
 
   const email = document.getElementById('email');
@@ -591,8 +591,23 @@ resetForm?.addEventListener('submit', (e) => {
     return;
   }
 
-  // TODO: replace with supabase.auth.resetPasswordForEmail(email.value)
-  console.log('Password reset requested for:', email.value);
+  const submitBtn = document.getElementById('submit-button');
+  submitBtn.disabled = true;
+  submitBtn.textContent = 'Sending...';
+
+  const { error } = await supabase.auth.resetPasswordForEmail(email.value, {
+    redirectTo: window.location.origin + '/settings.html',
+  });
+
+  submitBtn.disabled = false;
+  submitBtn.textContent = 'Send Reset Link';
+
+  if (error) {
+    const formError = document.getElementById('form-error');
+    formError.textContent = error.message;
+    formError.hidden = false;
+    return;
+  }
 
   sentMessage.textContent = `We've sent a password reset link to ${email.value}.`;
   requestCard.hidden = true;
