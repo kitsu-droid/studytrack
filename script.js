@@ -609,12 +609,13 @@ registerForm?.addEventListener('submit', async (e) => {
   submitBtn.textContent = 'Creating account...';
 
   const { error } = await supabaseClient.auth.signUp({
-    email: email.value,
-    password: password.value,
-    options: {
-      data: { display_name: name.value.trim() },
-    },
-  });
+  email: email.value,
+  password: password.value,
+  options: {
+    data: { display_name: name.value.trim() },
+    emailRedirectTo: window.location.origin + '/studytrack/index.html',
+  },
+});
 
   submitBtn.disabled = false;
   submitBtn.textContent = 'Create Account';
