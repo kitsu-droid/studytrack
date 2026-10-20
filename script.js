@@ -636,21 +636,31 @@ resetForm?.addEventListener('submit', async (e) => {
 
   let currentDate = new Date();
   let selectedDate = new Date();
+  let calendarItems = [];
 
-  // Pull homework from the hidden source block (or #homework-list if present)
-  function getCalendarHomework() {
-    const source = document.getElementById('homework-source') || document;
-    const cards = source.querySelectorAll('.homework-card');
-    return Array.from(cards).map(card => {
-      const dueTime = card.querySelector('.due-date time');
-      return {
-        element: card,
-        status: card.dataset.status,
-        title: card.querySelector('h3')?.textContent || 'Untitled',
-        subject: card.querySelector('.subject')?.textContent || '',
-        dueDate: dueTime ? new Date(dueTime.getAttribute('datetime')) : null,
-      };
-    }).filter(item => item.dueDate);
+  async function loadCalendarHomework() {
+    const { data: { user } } = await supabaseClient.auth.getUser();
+    if (!user) return [];
+
+    const { data, error } = await supabaseClient
+      .from('homework')
+      .select('*')
+      .eq('user_id', user.id)
+      .is('deleted_at', null)
+      .is('archived_at', null)
+      .order('due_at', { ascending: true });
+
+    if (error) {
+      console.error('Error loading calendar homework:', error);
+      return [];
+    }
+
+    return data.map(row => ({
+      title: row.title,
+      subject: row.subject || 'General',
+      status: getRowStatus(row),
+      dueDate: new Date(row.due_at),
+    }));
   }
 
   function isSameDay(a, b) {
@@ -660,27 +670,24 @@ resetForm?.addEventListener('submit', async (e) => {
   }
 
   function renderCalendar() {
-    const items = getCalendarHomework();
     const year = currentDate.getFullYear();
     const month = currentDate.getMonth();
 
     monthLabel.textContent = currentDate.toLocaleDateString('en-US', { month: 'long', year: 'numeric' });
 
     const firstDayOfMonth = new Date(year, month, 1);
-    const startOffset = firstDayOfMonth.getDay(); // 0 = Sunday
+    const startOffset = firstDayOfMonth.getDay();
     const daysInMonth = new Date(year, month + 1, 0).getDate();
     const today = new Date();
 
     grid.innerHTML = '';
 
-    // Empty cells before the 1st
     for (let i = 0; i < startOffset; i++) {
       const emptyCell = document.createElement('div');
       emptyCell.className = 'calendar-day empty';
       grid.appendChild(emptyCell);
     }
 
-    // Actual days
     for (let day = 1; day <= daysInMonth; day++) {
       const thisDate = new Date(year, month, day);
       const dayEl = document.createElement('div');
@@ -689,7 +696,7 @@ resetForm?.addEventListener('submit', async (e) => {
       if (isSameDay(thisDate, today)) dayEl.classList.add('today');
       if (isSameDay(thisDate, selectedDate)) dayEl.classList.add('selected');
 
-      const dayItems = items.filter(item => isSameDay(item.dueDate, thisDate));
+      const dayItems = calendarItems.filter(item => isSameDay(item.dueDate, thisDate));
 
       dayEl.innerHTML = `
         <span class="calendar-day-number">${day}</span>
@@ -709,8 +716,7 @@ resetForm?.addEventListener('submit', async (e) => {
   }
 
   function renderSelectedDate() {
-    const items = getCalendarHomework();
-    const dayItems = items.filter(item => isSameDay(item.dueDate, selectedDate));
+    const dayItems = calendarItems.filter(item => isSameDay(item.dueDate, selectedDate));
     const today = new Date();
 
     selectedDateLabel.textContent = isSameDay(selectedDate, today)
@@ -752,8 +758,11 @@ resetForm?.addEventListener('submit', async (e) => {
     renderCalendar();
   });
 
-  renderCalendar();
-  renderSelectedDate();
+  (async function init() {
+    calendarItems = await loadCalendarHomework();
+    renderCalendar();
+    renderSelectedDate();
+  })();
 })();
 
 // ===== Deadline Tracker =====
@@ -766,18 +775,30 @@ resetForm?.addEventListener('submit', async (e) => {
   const groupLater = document.querySelector('#group-later .deadline-group-list');
   const emptyState = document.getElementById('deadlines-empty-state');
 
-  function getDeadlineHomework() {
-    const source = document.getElementById('homework-source') || document;
-    const cards = source.querySelectorAll('.homework-card');
-    return Array.from(cards).map(card => {
-      const dueTime = card.querySelector('.due-date time');
-      return {
-        status: card.dataset.status,
-        title: card.querySelector('h3')?.textContent || 'Untitled',
-        subject: card.querySelector('.subject')?.textContent || '',
-        dueDate: dueTime ? new Date(dueTime.getAttribute('datetime')) : null,
-      };
-    }).filter(item => item.dueDate);
+  async function loadDeadlineHomework() {
+    const { data: { user } } = await supabaseClient.auth.getUser();
+    if (!user) return [];
+
+    const { data, error } = await supabaseClient
+      .from('homework')
+      .select('*')
+      .eq('user_id', user.id)
+      .is('deleted_at', null)
+      .is('archived_at', null)
+      .is('completed_at', null)
+      .order('due_at', { ascending: true });
+
+    if (error) {
+      console.error('Error loading deadlines:', error);
+      return [];
+    }
+
+    return data.map(row => ({
+      title: row.title,
+      subject: row.subject || 'General',
+      status: getRowStatus(row),
+      dueDate: new Date(row.due_at),
+    }));
   }
 
   function startOfDay(date) {
@@ -815,8 +836,8 @@ resetForm?.addEventListener('submit', async (e) => {
     return el;
   }
 
-  function renderDeadlineGroups() {
-    const items = getDeadlineHomework().filter(i => i.status === 'pending' || i.status === 'missing');
+  async function renderDeadlineGroups() {
+    const items = (await loadDeadlineHomework()).filter(i => i.status === 'pending' || i.status === 'missing');
 
     const today = startOfDay(new Date());
     const tomorrow = new Date(today); tomorrow.setDate(tomorrow.getDate() + 1);
@@ -843,7 +864,6 @@ resetForm?.addEventListener('submit', async (e) => {
     buckets.week.sort((a, b) => a.dueDate - b.dueDate).forEach(item => groupWeek.appendChild(buildDeadlineItem(item)));
     buckets.later.sort((a, b) => a.dueDate - b.dueDate).forEach(item => groupLater.appendChild(buildDeadlineItem(item)));
 
-    // Hide empty group sections
     document.getElementById('group-overdue').classList.toggle('empty-group', buckets.overdue.length === 0);
     document.getElementById('group-today').classList.toggle('empty-group', buckets.today.length === 0);
     document.getElementById('group-week').classList.toggle('empty-group', buckets.week.length === 0);
