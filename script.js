@@ -958,11 +958,12 @@ passwordForm?.addEventListener('submit', async (e) => {
   document.querySelectorAll('#password-form .field-error').forEach(el => el.hidden = true);
   document.querySelectorAll('#password-form .form-group').forEach(el => el.classList.remove('shake'));
 
-  if (!current.value) {
-    document.getElementById('current-password-error').hidden = false;
-    current.closest('.form-group').classList.add('shake');
-    isValid = false;
-  }
+  const currentPasswordVisible = current.closest('.form-group').style.display !== 'none';
+if (currentPasswordVisible && !current.value) {
+  document.getElementById('current-password-error').hidden = false;
+  current.closest('.form-group').classList.add('shake');
+  isValid = false;
+}
   if (newPass.value.length < 8) {
     document.getElementById('new-password-error').hidden = false;
     newPass.closest('.form-group').classList.add('shake');
@@ -976,6 +977,9 @@ passwordForm?.addEventListener('submit', async (e) => {
 
   if (!isValid) return;
 
+const isRecoveryFlow = document.getElementById('current-password').closest('.form-group').style.display === 'none';
+
+if (!isRecoveryFlow) {
   // Re-verify current password by attempting a sign-in with it
   const { data: { user } } = await supabaseClient.auth.getUser();
   const { error: verifyError } = await supabaseClient.auth.signInWithPassword({
@@ -989,9 +993,9 @@ passwordForm?.addEventListener('submit', async (e) => {
     current.closest('.form-group').classList.add('shake');
     return;
   }
+}
 
-  const { error } = await supabaseClient.auth.updateUser({ password: newPass.value });
-
+const { error } = await supabaseClient.auth.updateUser({ password: newPass.value });
   if (error) {
     console.error('Error updating password:', error);
     return;
@@ -1133,3 +1137,24 @@ document.querySelectorAll('.sidebar-footer a').forEach(link => {
     window.location.href = 'login.html';
   });
 });
+
+// ===== Detect Password Recovery Session =====
+(async function handlePasswordRecovery() {
+  const passwordFormEl = document.getElementById('password-form');
+  if (!passwordFormEl) return; // not on this page
+
+  supabaseClient.auth.onAuthStateChange((event, session) => {
+    if (event === 'PASSWORD_RECOVERY') {
+      // Hide the "current password" requirement for this special flow
+      const currentPasswordGroup = document.getElementById('current-password').closest('.form-group');
+      if (currentPasswordGroup) {
+        currentPasswordGroup.style.display = 'none';
+        document.getElementById('current-password').required = false;
+      }
+
+      // Update heading/messaging to reflect recovery context
+      const cardTitle = passwordFormEl.closest('.settings-card').querySelector('h2');
+      if (cardTitle) cardTitle.textContent = 'Set a New Password';
+    }
+  });
+})();
