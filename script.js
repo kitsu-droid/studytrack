@@ -392,6 +392,15 @@ function refreshDashboard() {
   if (homeworkListEl) applyFilter(activeFilter, items);
 }
 
+// ===== Dashboard: Load real homework data on this page =====
+(async function initDashboardData() {
+  const progressRing = document.getElementById('progress-ring-fill');
+  if (!progressRing) return; // not on this page
+
+  await fetchHomework(); // populates cachedHomework
+  refreshDashboard();
+})();
+
 // ===== Add Homework Form (with validation shake) =====
 const homeworkForm = document.getElementById('homework-form');
 
