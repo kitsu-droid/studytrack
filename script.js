@@ -1000,10 +1000,33 @@ deleteConfirmInput?.addEventListener('input', () => {
 });
 
 confirmDeleteBtn?.addEventListener('click', async () => {
-  // Note: full account deletion requires an Edge Function using the service_role
-  // key (regular users can't delete their own auth.users row). This is a
-  // placeholder until that's built — for now it just signs them out.
-  console.log('Account deletion requested — Edge Function not yet implemented');
+  confirmDeleteBtn.disabled = true;
+  confirmDeleteBtn.textContent = 'Deleting...';
+
+  const { data: { session } } = await supabaseClient.auth.getSession();
+
+  if (!session) {
+    window.location.href = 'login.html';
+    return;
+  }
+
+  const response = await fetch(`${SUPABASE_URL}/functions/v1/delete-account`, {
+    method: 'POST',
+    headers: {
+      'Authorization': `Bearer ${session.access_token}`,
+      'Content-Type': 'application/json',
+    },
+  });
+
+  const result = await response.json();
+
+  if (!response.ok) {
+    console.error('Error deleting account:', result.error);
+    confirmDeleteBtn.disabled = false;
+    confirmDeleteBtn.textContent = 'Delete Account';
+    alert('Something went wrong deleting your account. Please try again.');
+    return;
+  }
 
   await supabaseClient.auth.signOut();
   deleteModal.hidden = true;
