@@ -1072,3 +1072,12 @@ async function checkAuth() {
 }
 
 checkAuth();
+
+// ===== Sidebar Log Out =====
+document.querySelectorAll('.sidebar-footer a').forEach(link => {
+  link.addEventListener('click', async (e) => {
+    e.preventDefault();
+    await supabaseClient.auth.signOut();
+    window.location.href = 'login.html';
+  });
+});
