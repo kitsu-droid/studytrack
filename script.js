@@ -129,12 +129,13 @@ function updateMissingStatuses(items) {
   items.forEach(item => {
     if (item.status === 'pending' && item.dueDate && item.dueDate < now) {
       item.status = 'missing';
-      item.element.dataset.status = 'missing';
-
-      const statusBadge = item.element.querySelector('.status');
-      if (statusBadge) {
-        statusBadge.textContent = 'Missing';
-        statusBadge.className = 'status status-missing';
+      if (item.element) {
+        item.element.dataset.status = 'missing';
+        const statusBadge = item.element.querySelector('.status');
+        if (statusBadge) {
+          statusBadge.textContent = 'Missing';
+          statusBadge.className = 'status status-missing';
+        }
       }
     }
   });
@@ -175,7 +176,7 @@ function formatCountdown(dueDate) {
 function renderUpcomingDeadlines(items) {
   const container = document.getElementById('upcoming-deadlines');
   const emptyState = document.getElementById('upcoming-empty-state');
-  if (!container) return; // not on this page
+  if (!container) return;
 
   const now = new Date();
   const sevenDaysOut = new Date(now.getTime() + 7 * 24 * 60 * 60 * 1000);
@@ -196,16 +197,14 @@ function renderUpcomingDeadlines(items) {
   if (emptyState) emptyState.hidden = true;
 
   upcoming.forEach(item => {
-    const title = item.element.querySelector('h3')?.textContent || 'Untitled';
-    const subject = item.element.querySelector('.subject')?.textContent || '';
     const { label, urgent } = formatCountdown(item.dueDate);
 
     const el = document.createElement('div');
     el.className = 'deadline-item';
     el.innerHTML = `
       <div class="deadline-item-info">
-        <h4>${title}</h4>
-        <p>${subject}</p>
+        <h4>${item.title || 'Untitled'}</h4>
+        <p>${item.subject || ''}</p>
       </div>
       <span class="deadline-countdown ${urgent ? 'urgent' : ''}">${label}</span>
     `;
@@ -213,16 +212,15 @@ function renderUpcomingDeadlines(items) {
   });
 }
 
-// ===== Dashboard: Subject Breakdown =====
 function renderSubjectBreakdown(items) {
   const container = document.getElementById('subject-breakdown');
-  if (!container) return; // not on this page
+  if (!container) return;
 
   const visible = items.filter(i => i.status !== 'archive' && i.status !== 'trash');
   const bySubject = {};
 
   visible.forEach(item => {
-    const subject = item.element.querySelector('.subject')?.textContent || 'Other';
+    const subject = item.subject || 'Other';
     if (!bySubject[subject]) bySubject[subject] = { total: 0, completed: 0 };
     bySubject[subject].total++;
     if (item.status === 'completed') bySubject[subject].completed++;
@@ -380,7 +378,9 @@ function refreshDashboard() {
     element: document.querySelector(`.homework-card[data-id="${item.id}"]`),
     status: item.status,
     dueDate: item.dueDate,
-  })).filter(i => i.element); // skip if DOM element not found yet
+    title: item.title,
+    subject: item.subject,
+  }));
 
   updateMissingStatuses(items);
   updateSummary(items);
