@@ -336,33 +336,77 @@ filterButtons.forEach(button => {
 // ===== Homework Card Actions =====
 function attachCardActions() {
   document.querySelectorAll('.complete-homework').forEach(btn => {
-    btn.addEventListener('click', () => {
-      const card = btn.closest('.homework-card');
-      card.dataset.status = 'completed';
+  btn.addEventListener('click', async () => {
+    const card = btn.closest('.homework-card');
+    const id = card.dataset.id;
 
-      const statusBadge = card.querySelector('.status');
-      statusBadge.textContent = 'Completed';
-      statusBadge.className = 'status status-completed';
-      pulseBadge(card);
+    const { error } = await supabaseClient
+      .from('homework')
+      .update({ completed_at: new Date().toISOString() })
+      .eq('id', id);
 
-      btn.remove();
-      refreshDashboard();
-    });
+    if (error) {
+      console.error('Error completing homework:', error);
+      return;
+    }
+
+    const cachedItem = cachedHomework.find(h => h.id === id);
+    if (cachedItem) cachedItem.status = 'completed';
+
+    card.dataset.status = 'completed';
+    const statusBadge = card.querySelector('.status');
+    statusBadge.textContent = 'Completed';
+    statusBadge.className = 'status status-completed';
+    pulseBadge(card);
+
+    btn.remove();
+    refreshDashboard();
   });
+});
 
   document.querySelectorAll('.archive-homework').forEach(btn => {
-    btn.addEventListener('click', () => {
-      const card = btn.closest('.homework-card');
-      removeCardWithAnimation(card, 'archive');
-    });
-  });
+  btn.addEventListener('click', async () => {
+    const card = btn.closest('.homework-card');
+    const id = card.dataset.id;
 
-  document.querySelectorAll('.delete-homework').forEach(btn => {
-    btn.addEventListener('click', () => {
-      const card = btn.closest('.homework-card');
-      removeCardWithAnimation(card, 'trash');
-    });
+    const { error } = await supabaseClient
+      .from('homework')
+      .update({ archived_at: new Date().toISOString() })
+      .eq('id', id);
+
+    if (error) {
+      console.error('Error archiving homework:', error);
+      return;
+    }
+
+    const cachedItem = cachedHomework.find(h => h.id === id);
+    if (cachedItem) cachedItem.status = 'archive';
+
+    removeCardWithAnimation(card, 'archive');
   });
+});
+
+document.querySelectorAll('.delete-homework').forEach(btn => {
+  btn.addEventListener('click', async () => {
+    const card = btn.closest('.homework-card');
+    const id = card.dataset.id;
+
+    const { error } = await supabaseClient
+      .from('homework')
+      .update({ deleted_at: new Date().toISOString() })
+      .eq('id', id);
+
+    if (error) {
+      console.error('Error trashing homework:', error);
+      return;
+    }
+
+    const cachedItem = cachedHomework.find(h => h.id === id);
+    if (cachedItem) cachedItem.status = 'trash';
+
+    removeCardWithAnimation(card, 'trash');
+  });
+});
 
   document.querySelectorAll('.edit-homework').forEach(btn => {
     btn.addEventListener('click', () => {
