@@ -1084,7 +1084,7 @@ confirmDeleteBtn?.addEventListener('click', async () => {
   }
 
   nameInput.value = profile.display_name || '';
-  document.getElementById('timezone').value = profile.timezone || 'UTC';
+  document.getElementById('timezone').value = profile.timezone || 'Asia/Manila';
 
   const remindersToggleEl = document.getElementById('reminders-enabled');
   if (remindersToggleEl) remindersToggleEl.checked = profile.reminders_enabled;
