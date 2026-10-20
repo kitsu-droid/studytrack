@@ -343,12 +343,12 @@ ul {
   opacity: 0;
 }
 
-.homework-card {
+.homework-card[hidden] {
   background: var(--surface);
   border-radius: var(--radius);
   padding: 20px;
   box-shadow: var(--shadow);
-  display: flex;
+  display: none;
   flex-direction: column;
   gap: 14px;
   border-left: 4px solid var(--lavender);
