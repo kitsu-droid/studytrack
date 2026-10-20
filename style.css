@@ -53,6 +53,7 @@ ul {
   top: 0;
   left: 0;
   height: 100vh;
+  height: 100dvh; /* accounts for mobile browser address bar */
   width: 260px;
   background: var(--surface);
   box-shadow: var(--shadow);
@@ -62,6 +63,7 @@ ul {
   display: flex;
   flex-direction: column;
   padding: 24px 20px;
+  overflow-y: auto; /* allow scrolling if content overflows */
 }
 
 #sidebar.open {
