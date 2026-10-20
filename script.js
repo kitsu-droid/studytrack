@@ -613,7 +613,7 @@ resetForm?.addEventListener('submit', async (e) => {
   submitBtn.textContent = 'Sending...';
 
   const { error } = await supabaseClient.auth.resetPasswordForEmail(email.value, {
-    redirectTo: window.location.origin + '/settings.html',
+    redirectTo: window.location.origin + '/studytrack/settings.html',
   });
 
   submitBtn.disabled = false;
