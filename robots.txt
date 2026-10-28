@@ -12,4 +12,4 @@ Disallow: /style.css
 Disallow: /script.js
 Disallow: /sitemap.xml
 
-Sitemap: https://studytrack-ph.netlify.app/sitemap.xml
+Sitemap: https://studytrack-taupe.vercel.app/sitemap.xml
