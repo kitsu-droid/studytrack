@@ -1150,16 +1150,16 @@ async function checkAuth() {
 
   const { data: { session } } = await supabaseClient.auth.getSession();
 
-  if (!session && !PUBLIC_PAGES.includes(currentPage)) {
-    window.location.href = 'login.html';
-    return null;
-  }
-
   if (session && PUBLIC_PAGES.includes(currentPage)) {
-    window.location.href = 'index.html';
-    return session;
+  window.location.href = '/';
+  return session;
   }
 
+  if (!session && !PUBLIC_PAGES.includes(currentPage)) {
+  window.location.href = '/login';
+  return null;
+  }
+  
   if (session) {
     const profileLink = document.querySelector('.profile-link');
     if (profileLink) {
