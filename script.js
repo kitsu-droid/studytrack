@@ -613,7 +613,7 @@ registerForm?.addEventListener('submit', async (e) => {
   password: password.value,
   options: {
     data: { display_name: name.value.trim() },
-    emailRedirectTo: window.location.origin + '/studytrack/index.html',
+    emailRedirectTo: window.location.origin + '/index.html',
   },
 });
 
@@ -658,7 +658,7 @@ resetForm?.addEventListener('submit', async (e) => {
   submitBtn.textContent = 'Sending...';
 
   const { error } = await supabaseClient.auth.resetPasswordForEmail(email.value, {
-    redirectTo: window.location.origin + '/studytrack/settings.html',
+    redirectTo: window.location.origin + '/settings.html',
   });
 
   submitBtn.disabled = false;
