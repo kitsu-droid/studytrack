@@ -1143,7 +1143,11 @@ confirmDeleteBtn?.addEventListener('click', async () => {
 const PUBLIC_PAGES = ['login.html', 'register.html', 'reset-password.html'];
 
 async function checkAuth() {
-  const currentPage = window.location.pathname.split('/').pop() || 'index.html';
+  let currentPage = window.location.pathname.split('/').pop() || 'index';
+  if (!currentPage.endsWith('.html')) {
+    currentPage += '.html';
+  }
+
   const { data: { session } } = await supabaseClient.auth.getSession();
 
   if (!session && !PUBLIC_PAGES.includes(currentPage)) {
