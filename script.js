@@ -108,7 +108,7 @@ function renderHomeworkCard(item) {
 }
 
 async function loadAndRenderHomework() {
-  if (!homeworkListEl) return; // not on this page
+  if (!homeworkListEl) return;
 
   const items = await fetchHomework();
 
@@ -146,7 +146,7 @@ function updateProgressRing(items) {
   const ring = document.getElementById('progress-ring-fill');
   const percentLabel = document.getElementById('progress-percent');
   const progressLabel = document.getElementById('progress-label');
-  if (!ring) return; // not on this page
+  if (!ring) return;
 
   const visible = items.filter(i => i.status !== 'archive' && i.status !== 'trash');
   const total = visible.length;
@@ -411,7 +411,7 @@ document.querySelectorAll('.delete-homework').forEach(btn => {
   document.querySelectorAll('.edit-homework').forEach(btn => {
     btn.addEventListener('click', () => {
       const card = btn.closest('.homework-card');
-      window.location.href = `add-homework.html?edit=${encodeURIComponent(card.querySelector('h3').textContent)}`;
+      window.location.href = `/add-homework?edit=${encodeURIComponent(card.querySelector('h3').textContent)}`;
     });
   });
 }
@@ -439,9 +439,9 @@ function refreshDashboard() {
 // ===== Dashboard: Load real homework data on this page =====
 (async function initDashboardData() {
   const progressRing = document.getElementById('progress-ring-fill');
-  if (!progressRing) return; // not on this page
+  if (!progressRing) return;
 
-  await fetchHomework(); // populates cachedHomework
+  await fetchHomework();
   refreshDashboard();
 })();
 
@@ -475,7 +475,7 @@ homeworkForm?.addEventListener('submit', async (e) => {
 
   const { data: { user } } = await supabaseClient.auth.getUser();
   if (!user) {
-    window.location.href = 'login.html';
+    window.location.href = '/login';
     return;
   }
 
@@ -501,7 +501,7 @@ homeworkForm?.addEventListener('submit', async (e) => {
     return;
   }
 
-  window.location.href = 'index.html';
+  window.location.href = '/';
 });
 
 // ===== Init =====
@@ -556,7 +556,7 @@ loginForm?.addEventListener('submit', async (e) => {
     return;
   }
 
-  window.location.href = 'index.html';
+  window.location.href = '/';
 });
 
 // ===== Auth: Register Form =====
@@ -609,13 +609,13 @@ registerForm?.addEventListener('submit', async (e) => {
   submitBtn.textContent = 'Creating account...';
 
   const { error } = await supabaseClient.auth.signUp({
-  email: email.value,
-  password: password.value,
-  options: {
-    data: { display_name: name.value.trim() },
-    emailRedirectTo: window.location.origin + '/index.html',
-  },
-});
+    email: email.value,
+    password: password.value,
+    options: {
+      data: { display_name: name.value.trim() },
+      emailRedirectTo: window.location.origin + '/',
+    },
+  });
 
   submitBtn.disabled = false;
   submitBtn.textContent = 'Create Account';
@@ -647,7 +647,7 @@ resetForm?.addEventListener('submit', async (e) => {
   document.querySelectorAll('.field-error').forEach(el => el.hidden = true);
   document.querySelectorAll('.form-group').forEach(el => el.classList.remove('shake'));
 
-  if (!email.value.includes('@')) {
+    if (!email.value.includes('@')) {
     document.getElementById('email-error').hidden = false;
     email.closest('.form-group').classList.add('shake');
     return;
@@ -658,7 +658,7 @@ resetForm?.addEventListener('submit', async (e) => {
   submitBtn.textContent = 'Sending...';
 
   const { error } = await supabaseClient.auth.resetPasswordForEmail(email.value, {
-    redirectTo: window.location.origin + '/settings.html',
+    redirectTo: window.location.origin + '/settings',
   });
 
   submitBtn.disabled = false;
@@ -679,7 +679,7 @@ resetForm?.addEventListener('submit', async (e) => {
 // ===== Calendar =====
 (function initCalendar() {
   const grid = document.getElementById('calendar-grid');
-  if (!grid) return; // not on this page
+  if (!grid) return;
 
   const monthLabel = document.getElementById('calendar-month-label');
   const prevBtn = document.getElementById('prev-month');
@@ -822,7 +822,7 @@ resetForm?.addEventListener('submit', async (e) => {
 // ===== Deadline Tracker =====
 (function initDeadlineTracker() {
   const groupOverdue = document.querySelector('#group-overdue .deadline-group-list');
-  if (!groupOverdue) return; // not on this page
+  if (!groupOverdue) return;
 
   const groupToday = document.querySelector('#group-today .deadline-group-list');
   const groupWeek = document.querySelector('#group-week .deadline-group-list');
@@ -1004,11 +1004,11 @@ passwordForm?.addEventListener('submit', async (e) => {
   document.querySelectorAll('#password-form .form-group').forEach(el => el.classList.remove('shake'));
 
   const currentPasswordVisible = current.closest('.form-group').style.display !== 'none';
-if (currentPasswordVisible && !current.value) {
-  document.getElementById('current-password-error').hidden = false;
-  current.closest('.form-group').classList.add('shake');
-  isValid = false;
-}
+  if (currentPasswordVisible && !current.value) {
+    document.getElementById('current-password-error').hidden = false;
+    current.closest('.form-group').classList.add('shake');
+    isValid = false;
+  }
   if (newPass.value.length < 8) {
     document.getElementById('new-password-error').hidden = false;
     newPass.closest('.form-group').classList.add('shake');
@@ -1022,25 +1022,24 @@ if (currentPasswordVisible && !current.value) {
 
   if (!isValid) return;
 
-const isRecoveryFlow = document.getElementById('current-password').closest('.form-group').style.display === 'none';
+  const isRecoveryFlow = document.getElementById('current-password').closest('.form-group').style.display === 'none';
 
-if (!isRecoveryFlow) {
-  // Re-verify current password by attempting a sign-in with it
-  const { data: { user } } = await supabaseClient.auth.getUser();
-  const { error: verifyError } = await supabaseClient.auth.signInWithPassword({
-    email: user.email,
-    password: current.value,
-  });
+  if (!isRecoveryFlow) {
+    const { data: { user } } = await supabaseClient.auth.getUser();
+    const { error: verifyError } = await supabaseClient.auth.signInWithPassword({
+      email: user.email,
+      password: current.value,
+    });
 
-  if (verifyError) {
-    document.getElementById('current-password-error').textContent = 'Current password is incorrect.';
-    document.getElementById('current-password-error').hidden = false;
-    current.closest('.form-group').classList.add('shake');
-    return;
+    if (verifyError) {
+      document.getElementById('current-password-error').textContent = 'Current password is incorrect.';
+      document.getElementById('current-password-error').hidden = false;
+      current.closest('.form-group').classList.add('shake');
+      return;
+    }
   }
-}
 
-const { error } = await supabaseClient.auth.updateUser({ password: newPass.value });
+  const { error } = await supabaseClient.auth.updateUser({ password: newPass.value });
   if (error) {
     console.error('Error updating password:', error);
     return;
@@ -1084,7 +1083,7 @@ confirmDeleteBtn?.addEventListener('click', async () => {
   const { data: { session } } = await supabaseClient.auth.getSession();
 
   if (!session) {
-    window.location.href = 'login.html';
+    window.location.href = '/login';
     return;
   }
 
@@ -1108,13 +1107,13 @@ confirmDeleteBtn?.addEventListener('click', async () => {
 
   await supabaseClient.auth.signOut();
   deleteModal.hidden = true;
-  window.location.href = 'login.html';
+  window.location.href = '/login';
 });
 
 // ===== Settings: Pre-fill Profile Form =====
 (async function loadProfileSettings() {
   const nameInput = document.getElementById('display-name');
-  if (!nameInput) return; // not on this page
+  if (!nameInput) return;
 
   const { data: { user } } = await supabaseClient.auth.getUser();
   if (!user) return;
@@ -1151,15 +1150,15 @@ async function checkAuth() {
   const { data: { session } } = await supabaseClient.auth.getSession();
 
   if (session && PUBLIC_PAGES.includes(currentPage)) {
-  window.location.href = '/';
-  return session;
+    window.location.href = '/';
+    return session;
   }
 
   if (!session && !PUBLIC_PAGES.includes(currentPage)) {
-  window.location.href = '/login';
-  return null;
+    window.location.href = '/login';
+    return null;
   }
-  
+
   if (session) {
     const profileLink = document.querySelector('.profile-link');
     if (profileLink) {
@@ -1183,25 +1182,23 @@ document.querySelectorAll('.sidebar-footer a').forEach(link => {
   link.addEventListener('click', async (e) => {
     e.preventDefault();
     await supabaseClient.auth.signOut();
-    window.location.href = 'login.html';
+    window.location.href = '/login';
   });
 });
 
 // ===== Detect Password Recovery Session =====
 (async function handlePasswordRecovery() {
   const passwordFormEl = document.getElementById('password-form');
-  if (!passwordFormEl) return; // not on this page
+  if (!passwordFormEl) return;
 
   supabaseClient.auth.onAuthStateChange((event, session) => {
     if (event === 'PASSWORD_RECOVERY') {
-      // Hide the "current password" requirement for this special flow
       const currentPasswordGroup = document.getElementById('current-password').closest('.form-group');
       if (currentPasswordGroup) {
         currentPasswordGroup.style.display = 'none';
         document.getElementById('current-password').required = false;
       }
 
-      // Update heading/messaging to reflect recovery context
       const cardTitle = passwordFormEl.closest('.settings-card').querySelector('h2');
       if (cardTitle) cardTitle.textContent = 'Set a New Password';
     }
