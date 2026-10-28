@@ -1,0 +1,15 @@
+User-agent: *
+Allow: /login
+Allow: /register
+Allow: /reset-password
+Disallow: /
+Disallow: /dashboard
+Disallow: /add-homework
+Disallow: /calendar
+Disallow: /deadlines
+Disallow: /settings
+Disallow: /style.css
+Disallow: /script.js
+Disallow: /sitemap.xml
+
+Sitemap: https://studytrack-ph.netlify.app/sitemap.xml
