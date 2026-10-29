@@ -1,4 +1,3 @@
-/* ===== Base & Variables ===== */
 :root {
   --bg: #FBF8F4;
   --surface: #FFFFFF;
@@ -47,13 +46,12 @@ ul {
   list-style: none;
 }
 
-/* ===== Sidebar ===== */
 #sidebar {
   position: fixed;
   top: 0;
   left: 0;
   height: 100vh;
-  height: 100dvh; /* accounts for mobile browser address bar */
+  height: 100dvh;
   width: 260px;
   background: var(--surface);
   box-shadow: var(--shadow);
@@ -63,7 +61,7 @@ ul {
   display: flex;
   flex-direction: column;
   padding: 24px 20px;
-  overflow-y: auto; /* allow scrolling if content overflows */
+  overflow-y: auto;
 }
 
 #sidebar.open {
@@ -160,7 +158,6 @@ ul {
   opacity: 1;
 }
 
-/* ===== Topbar ===== */
 .topbar {
   display: flex;
   align-items: center;
@@ -197,7 +194,6 @@ ul {
   color: #8A5A2F;
 }
 
-/* ===== Welcome Section ===== */
 .welcome-section {
   padding: 32px 24px 8px;
 }
@@ -222,7 +218,6 @@ ul {
   font-size: 0.95rem;
 }
 
-/* ===== Summary Cards ===== */
 .summary-section {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
@@ -256,7 +251,6 @@ ul {
 .summary-card:nth-child(3) p { color: var(--danger); }
 .summary-card:nth-child(4) p { color: var(--mint-dark); }
 
-/* ===== Homework Section ===== */
 .homework-section {
   padding: 20px 24px;
 }
@@ -296,7 +290,6 @@ ul {
   box-shadow: var(--shadow-hover);
 }
 
-/* ===== Filters ===== */
 .homework-filters {
   display: flex;
   gap: 8px;
@@ -331,7 +324,6 @@ ul {
   color: #fff;
 }
 
-/* ===== Homework Cards ===== */
 #homework-list {
   display: flex;
   flex-direction: column;
@@ -468,7 +460,6 @@ ul {
   color: var(--danger);
 }
 
-/* ===== Empty State ===== */
 #empty-state {
   text-align: center;
   padding: 48px 20px;
@@ -499,7 +490,6 @@ ul {
   font-size: 0.85rem;
 }
 
-/* ===== Upcoming Deadlines ===== */
 .upcoming-section {
   padding: 20px 24px 40px;
 }
@@ -510,7 +500,6 @@ ul {
   gap: 10px;
 }
 
-/* ===== Form Section ===== */
 .form-section {
   padding: 20px 24px 40px;
 }
@@ -658,7 +647,6 @@ ul {
   }
 }
 
-/* ===== Animations (keyframes) ===== */
 @keyframes cardFadeIn {
   from {
     opacity: 0;
@@ -720,7 +708,6 @@ ul {
   border-color: var(--danger) !important;
 }
 
-/* Respect reduced motion preferences */
 @media (prefers-reduced-motion: reduce) {
   *,
   *::before,
@@ -731,7 +718,6 @@ ul {
   }
 }
 
-/* ===== Footer ===== */
 footer {
   text-align: center;
   padding: 24px;
@@ -739,7 +725,6 @@ footer {
   font-size: 0.8rem;
 }
 
-/* ===== Desktop Layout ===== */
 @media (min-width: 900px) {
   #sidebar {
     transform: translateX(0);
@@ -766,7 +751,6 @@ footer {
   }
 }
 
-/* ===== Progress Ring ===== */
 .progress-section {
   padding: 20px 24px;
 }
@@ -816,7 +800,7 @@ footer {
   stroke: var(--mint-dark);
   stroke-width: 10;
   stroke-linecap: round;
-  stroke-dasharray: 326.7; /* 2 * π * 52 */
+  stroke-dasharray: 326.7;
   stroke-dashoffset: 326.7;
   transition: stroke-dashoffset 0.6s ease;
 }
@@ -831,7 +815,6 @@ footer {
   color: var(--text);
 }
 
-/* ===== Upcoming Deadline Items ===== */
 .deadline-item {
   background: var(--surface);
   border-radius: var(--radius-sm);
@@ -884,7 +867,6 @@ footer {
   margin-bottom: 6px;
 }
 
-/* ===== Subject Breakdown ===== */
 .subject-breakdown-section {
   padding: 20px 24px 40px;
 }
@@ -932,7 +914,6 @@ footer {
   transition: width 0.5s ease;
 }
 
-/* ===== Auth Pages (standalone) ===== */
 .auth-body {
   background: linear-gradient(160deg, var(--bg) 0%, #F3EBFA 100%);
   min-height: 100vh;
@@ -1030,7 +1011,6 @@ footer {
   color: var(--text-muted);
 }
 
-/* ===== Calendar ===== */
 .calendar-section {
   padding: 20px 24px;
 }
@@ -1160,7 +1140,6 @@ footer {
   background: var(--mint-dark);
 }
 
-/* ===== Selected Date Section ===== */
 .selected-date-section {
   padding: 20px 24px 40px;
 }
@@ -1191,7 +1170,6 @@ footer {
   }
 }
 
-/* ===== Deadline Tracker ===== */
 .deadline-groups-section {
   padding: 20px 24px 40px;
   display: flex;
@@ -1251,7 +1229,6 @@ footer {
   font-size: 0.85rem;
 }
 
-/* ===== Settings ===== */
 .settings-section {
   padding: 10px 24px;
 }
@@ -1306,7 +1283,6 @@ footer {
   cursor: not-allowed;
 }
 
-/* Toggle switch */
 .settings-toggle-row {
   display: flex;
   align-items: center;
@@ -1363,7 +1339,6 @@ footer {
   transform: translateX(20px);
 }
 
-/* Danger zone */
 .settings-card-danger {
   border: 1.5px solid var(--pink);
 }
@@ -1388,7 +1363,6 @@ footer {
   cursor: not-allowed;
 }
 
-/* Modal */
 .modal-overlay {
   position: fixed;
   inset: 0;
