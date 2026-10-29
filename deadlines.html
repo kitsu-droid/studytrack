@@ -7,16 +7,13 @@
     <link rel="stylesheet" href="style.css">
     <link rel="icon" type="image/jpeg" href="/favicon.jpg">
 </head>
-    <script src="https://cdn.jsdelivr.net/npm/eruda"></script>
-    <script>eruda.init();</script>
 
 <body>
 
-    <!-- Mobile navigation menu -->
     <aside id="sidebar" aria-label="Main navigation">
 
         <div class="sidebar-header">
-            <a href="index.html" class="logo">StudyTrack</a>
+            <a href="/" class="logo">StudyTrack</a>
             <button type="button" id="close-menu" aria-label="Close navigation menu">
                 &times;
             </button>
@@ -24,17 +21,17 @@
 
         <nav>
             <ul>
-                <li><a href="index.html">Home</a></li>
-                <li><a href="dashboard.html">Dashboard</a></li>
-                <li><a href="add-homework.html">Add Homework</a></li>
-                <li><a href="calendar.html">Calendar</a></li>
-                <li><a href="deadlines.html" aria-current="page">Deadline Tracker</a></li>
-                <li><a href="settings.html">Settings</a></li>
+                <li><a href="/">Home</a></li>
+                <li><a href="/dashboard">Dashboard</a></li>
+                <li><a href="/add-homework">Add Homework</a></li>
+                <li><a href="/calendar">Calendar</a></li>
+                <li><a href="/deadlines" aria-current="page">Deadline Tracker</a></li>
+                <li><a href="/settings">Settings</a></li>
             </ul>
         </nav>
 
         <div class="sidebar-footer">
-            <a href="login.html">Log Out</a>
+            <a href="/login">Log Out</a>
         </div>
 
     </aside>
@@ -53,21 +50,19 @@
                 &#9776;
             </button>
 
-            <a href="index.html" class="logo">StudyTrack</a>
+            <a href="/" class="logo">StudyTrack</a>
 
-            <a href="settings.html" class="profile-link">
+            <a href="/settings" class="profile-link">
                 My Profile
             </a>
         </header>
 
-        <!-- Page introduction -->
         <section class="welcome-section">
             <p>STAY ON TOP OF IT</p>
             <h1>Deadline Tracker</h1>
             <p>Every assignment, grouped by how soon it's due.</p>
         </section>
 
-        <!-- Deadline groups -->
         <section class="deadline-groups-section">
 
             <div id="group-overdue" class="deadline-group">
@@ -93,7 +88,7 @@
             <div id="deadlines-empty-state" hidden>
                 <h3>Nothing due</h3>
                 <p>You don't have any pending or missing assignments right now.</p>
-                <a href="add-homework.html">Add your first assignment</a>
+                <a href="/add-homework">Add your first assignment</a>
             </div>
 
         </section>
@@ -103,10 +98,9 @@
         </footer>
 
     </main>
-    
+
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
     <script src="supabase-client.js"></script>
     <script src="script.js"></script>
-
 </body>
 </html>
