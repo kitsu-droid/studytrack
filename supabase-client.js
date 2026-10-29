@@ -1,4 +1,3 @@
-// ===== Supabase Client Setup =====
 const SUPABASE_URL = 'https://zivuyoajoyxaiskvtlqn.supabase.co';
 const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InppdnV5b2Fqb3l4YWlza3Z0bHFuIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTI0MDk5MDEsImV4cCI6MjEwNzk4NTkwMX0.De_CEEiqjF_OyEdv-uzAP2U6T7M0wpCM9edQOUCelpA';
 
