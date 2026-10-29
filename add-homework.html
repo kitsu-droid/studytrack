@@ -7,16 +7,13 @@
     <link rel="stylesheet" href="style.css">
     <link rel="icon" type="image/jpeg" href="/favicon.jpg">
 </head>
-    <script src="https://cdn.jsdelivr.net/npm/eruda"></script>
-    <script>eruda.init();</script>
 
 <body>
 
-    <!-- Mobile navigation menu -->
     <aside id="sidebar" aria-label="Main navigation">
 
         <div class="sidebar-header">
-            <a href="index.html" class="logo">StudyTrack</a>
+            <a href="/" class="logo">StudyTrack</a>
             <button type="button" id="close-menu" aria-label="Close navigation menu">
                 &times;
             </button>
@@ -24,17 +21,17 @@
 
         <nav>
             <ul>
-                <li><a href="index.html">Home</a></li>
-                <li><a href="dashboard.html">Dashboard</a></li>
-                <li><a href="add-homework.html" aria-current="page">Add Homework</a></li>
-                <li><a href="calendar.html">Calendar</a></li>
-                <li><a href="deadlines.html">Deadline Tracker</a></li>
-                <li><a href="settings.html">Settings</a></li>
+                <li><a href="/">Home</a></li>
+                <li><a href="/dashboard">Dashboard</a></li>
+                <li><a href="/add-homework" aria-current="page">Add Homework</a></li>
+                <li><a href="/calendar">Calendar</a></li>
+                <li><a href="/deadlines">Deadline Tracker</a></li>
+                <li><a href="/settings">Settings</a></li>
             </ul>
         </nav>
 
         <div class="sidebar-footer">
-            <a href="login.html">Log Out</a>
+            <a href="/login">Log Out</a>
         </div>
 
     </aside>
@@ -53,21 +50,19 @@
                 &#9776;
             </button>
 
-            <a href="index.html" class="logo">StudyTrack</a>
+            <a href="/" class="logo">StudyTrack</a>
 
-            <a href="settings.html" class="profile-link">
+            <a href="/settings" class="profile-link">
                 My Profile
             </a>
         </header>
 
-        <!-- Page introduction -->
         <section class="welcome-section">
             <p>ADD A NEW TASK</p>
             <h1 id="form-title">Add Homework</h1>
             <p>Fill in the details below to add a new assignment to your list.</p>
         </section>
 
-        <!-- Homework form -->
         <section class="form-section">
 
             <form id="homework-form" novalidate>
@@ -137,11 +132,10 @@
                     <label for="reminders">Send me email reminders for this assignment</label>
                 </div>
 
-                <!-- General error, e.g. for a failed save -->
                 <p class="form-error" id="form-error" hidden></p>
 
                 <div class="form-actions">
-                    <a href="index.html" class="cancel-button">Cancel</a>
+                    <a href="/" class="cancel-button">Cancel</a>
                     <button type="submit" class="submit-button" id="submit-button">
                         Add Assignment
                     </button>
@@ -160,6 +154,5 @@
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
     <script src="supabase-client.js"></script>
     <script src="script.js"></script>
-
 </body>
 </html>
