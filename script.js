@@ -1,4 +1,4 @@
-// ===== Sidebar Toggle =====
+
 const sidebar = document.getElementById('sidebar');
 const openMenuBtn = document.getElementById('open-menu');
 const closeMenuBtn = document.getElementById('close-menu');
@@ -34,7 +34,6 @@ window.addEventListener('resize', () => {
   }
 });
 
-// ===== Fetch Homework from Supabase =====
 let cachedHomework = [];
 
 async function fetchHomework() {
@@ -77,7 +76,6 @@ function getRowStatus(row) {
   return 'pending';
 }
 
-// ===== Render Homework Cards into the DOM =====
 function renderHomeworkCard(item) {
   const card = document.createElement('article');
   card.className = 'homework-card';
@@ -123,7 +121,6 @@ async function loadAndRenderHomework() {
   refreshDashboard();
 }
 
-// ===== Determine "Missing" status dynamically =====
 function updateMissingStatuses(items) {
   const now = new Date();
   items.forEach(item => {
@@ -141,7 +138,6 @@ function updateMissingStatuses(items) {
   });
 }
 
-// ===== Dashboard: Progress Ring =====
 function updateProgressRing(items) {
   const ring = document.getElementById('progress-ring-fill');
   const percentLabel = document.getElementById('progress-percent');
@@ -161,7 +157,6 @@ function updateProgressRing(items) {
   progressLabel.textContent = `${completed} of ${total} assignments completed`;
 }
 
-// ===== Dashboard: Upcoming Deadlines =====
 function formatCountdown(dueDate) {
   const now = new Date();
   const diffMs = dueDate - now;
@@ -246,7 +241,6 @@ function renderSubjectBreakdown(items) {
   });
 }
 
-// ===== Pulse helpers (animation triggers) =====
 function pulseBadge(card) {
   const badge = card.querySelector('.status');
   if (!badge) return;
@@ -259,7 +253,6 @@ function pulseNumber(el) {
   el.addEventListener('animationend', () => el.classList.remove('updated'), { once: true });
 }
 
-// ===== Card removal with animation =====
 function removeCardWithAnimation(card, newStatus) {
   card.classList.add('removing');
   card.addEventListener('animationend', () => {
@@ -270,7 +263,6 @@ function removeCardWithAnimation(card, newStatus) {
   }, { once: true });
 }
 
-// ===== Update Summary Cards (with pulse) =====
 function updateSummary(items) {
   const visible = items.filter(i => i.status !== 'archive' && i.status !== 'trash');
 
@@ -291,7 +283,6 @@ function updateSummary(items) {
   });
 }
 
-// ===== Filter Buttons (with fade transition) =====
 const filterButtons = document.querySelectorAll('.homework-filters button');
 const homeworkListEl = document.getElementById('homework-list');
 const emptyStateEl = document.getElementById('empty-state');
@@ -325,88 +316,87 @@ filterButtons.forEach(button => {
 
     const filter = button.dataset.filter;
     const items = cachedHomework.map(item => ({
-     element: document.querySelector(`.homework-card[data-id="${item.id}"]`),
-     status: item.status,
-     dueDate: item.dueDate,
+      element: document.querySelector(`.homework-card[data-id="${item.id}"]`),
+      status: item.status,
+      dueDate: item.dueDate,
     })).filter(i => i.element);
     applyFilter(filter, items);
   });
 });
 
-// ===== Homework Card Actions =====
 function attachCardActions() {
   document.querySelectorAll('.complete-homework').forEach(btn => {
-  btn.addEventListener('click', async () => {
-    const card = btn.closest('.homework-card');
-    const id = card.dataset.id;
+    btn.addEventListener('click', async () => {
+      const card = btn.closest('.homework-card');
+      const id = card.dataset.id;
 
-    const { error } = await supabaseClient
-      .from('homework')
-      .update({ completed_at: new Date().toISOString() })
-      .eq('id', id);
+      const { error } = await supabaseClient
+        .from('homework')
+        .update({ completed_at: new Date().toISOString() })
+        .eq('id', id);
 
-    if (error) {
-      console.error('Error completing homework:', error);
-      return;
-    }
+      if (error) {
+        console.error('Error completing homework:', error);
+        return;
+      }
 
-    const cachedItem = cachedHomework.find(h => h.id === id);
-    if (cachedItem) cachedItem.status = 'completed';
+      const cachedItem = cachedHomework.find(h => h.id === id);
+      if (cachedItem) cachedItem.status = 'completed';
 
-    card.dataset.status = 'completed';
-    const statusBadge = card.querySelector('.status');
-    statusBadge.textContent = 'Completed';
-    statusBadge.className = 'status status-completed';
-    pulseBadge(card);
+      card.dataset.status = 'completed';
+      const statusBadge = card.querySelector('.status');
+      statusBadge.textContent = 'Completed';
+      statusBadge.className = 'status status-completed';
+      pulseBadge(card);
 
-    btn.remove();
-    refreshDashboard();
+      btn.remove();
+      refreshDashboard();
+    });
   });
-});
 
   document.querySelectorAll('.archive-homework').forEach(btn => {
-  btn.addEventListener('click', async () => {
-    const card = btn.closest('.homework-card');
-    const id = card.dataset.id;
+    btn.addEventListener('click', async () => {
+      const card = btn.closest('.homework-card');
+      const id = card.dataset.id;
 
-    const { error } = await supabaseClient
-      .from('homework')
-      .update({ archived_at: new Date().toISOString() })
-      .eq('id', id);
+      const { error } = await supabaseClient
+        .from('homework')
+        .update({ archived_at: new Date().toISOString() })
+        .eq('id', id);
 
-    if (error) {
-      console.error('Error archiving homework:', error);
-      return;
-    }
+      if (error) {
+        console.error('Error archiving homework:', error);
+        return;
+      }
 
-    const cachedItem = cachedHomework.find(h => h.id === id);
-    if (cachedItem) cachedItem.status = 'archive';
+      const cachedItem = cachedHomework.find(h => h.id === id);
+      if (cachedItem) cachedItem.status = 'archive';
 
-    removeCardWithAnimation(card, 'archive');
+      removeCardWithAnimation(card, 'archive');
+    });
   });
-});
 
-document.querySelectorAll('.delete-homework').forEach(btn => {
-  btn.addEventListener('click', async () => {
-    const card = btn.closest('.homework-card');
-    const id = card.dataset.id;
+  document.querySelectorAll('.delete-homework').forEach(btn => {
+    btn.addEventListener('click', async () => {
+      const card = btn.closest('.homework-card');
+      const id = card.dataset.id;
 
-    const { error } = await supabaseClient
-      .from('homework')
-      .update({ deleted_at: new Date().toISOString() })
-      .eq('id', id);
+      const { error } = await supabaseClient
+        .from('homework')
+        .update({ deleted_at: new Date().toISOString() })
+        .eq('id', id);
 
-    if (error) {
-      console.error('Error trashing homework:', error);
-      return;
-    }
+      if (error) {
+        console.error('Error trashing homework:', error);
+        return;
+      }
 
-    const cachedItem = cachedHomework.find(h => h.id === id);
-    if (cachedItem) cachedItem.status = 'trash';
+      const cachedItem = cachedHomework.find(h => h.id === id);
+      if (cachedItem) cachedItem.status = 'trash';
 
-    removeCardWithAnimation(card, 'trash');
+      removeCardWithAnimation(card, 'trash');
+    });
   });
-});
 
   document.querySelectorAll('.edit-homework').forEach(btn => {
     btn.addEventListener('click', () => {
@@ -416,7 +406,6 @@ document.querySelectorAll('.delete-homework').forEach(btn => {
   });
 }
 
-// ===== Refresh everything after a change =====
 function refreshDashboard() {
   const items = cachedHomework.map(item => ({
     element: document.querySelector(`.homework-card[data-id="${item.id}"]`),
@@ -436,7 +425,6 @@ function refreshDashboard() {
   if (homeworkListEl) applyFilter(activeFilter, items);
 }
 
-// ===== Dashboard: Load real homework data on this page =====
 (async function initDashboardData() {
   const progressRing = document.getElementById('progress-ring-fill');
   if (!progressRing) return;
@@ -445,7 +433,6 @@ function refreshDashboard() {
   refreshDashboard();
 })();
 
-// ===== Add Homework Form (with validation shake) =====
 const homeworkForm = document.getElementById('homework-form');
 
 homeworkForm?.addEventListener('submit', async (e) => {
@@ -504,12 +491,10 @@ homeworkForm?.addEventListener('submit', async (e) => {
   window.location.href = '/';
 });
 
-// ===== Init =====
 document.addEventListener('DOMContentLoaded', () => {
   loadAndRenderHomework();
 });
 
-// ===== Auth: Login Form =====
 const loginForm = document.getElementById('login-form');
 
 loginForm?.addEventListener('submit', async (e) => {
@@ -559,7 +544,6 @@ loginForm?.addEventListener('submit', async (e) => {
   window.location.href = '/';
 });
 
-// ===== Auth: Register Form =====
 const registerForm = document.getElementById('register-form');
 
 registerForm?.addEventListener('submit', async (e) => {
@@ -633,7 +617,6 @@ registerForm?.addEventListener('submit', async (e) => {
   registerForm.reset();
 });
 
-// ===== Auth: Reset Password Form =====
 const resetForm = document.getElementById('reset-form');
 
 resetForm?.addEventListener('submit', async (e) => {
@@ -647,7 +630,7 @@ resetForm?.addEventListener('submit', async (e) => {
   document.querySelectorAll('.field-error').forEach(el => el.hidden = true);
   document.querySelectorAll('.form-group').forEach(el => el.classList.remove('shake'));
 
-    if (!email.value.includes('@')) {
+  if (!email.value.includes('@')) {
     document.getElementById('email-error').hidden = false;
     email.closest('.form-group').classList.add('shake');
     return;
@@ -676,7 +659,6 @@ resetForm?.addEventListener('submit', async (e) => {
   sentCard.hidden = false;
 });
 
-// ===== Calendar =====
 (function initCalendar() {
   const grid = document.getElementById('calendar-grid');
   if (!grid) return;
@@ -819,7 +801,6 @@ resetForm?.addEventListener('submit', async (e) => {
   })();
 })();
 
-// ===== Deadline Tracker =====
 (function initDeadlineTracker() {
   const groupOverdue = document.querySelector('#group-overdue .deadline-group-list');
   if (!groupOverdue) return;
@@ -929,7 +910,6 @@ resetForm?.addEventListener('submit', async (e) => {
   renderDeadlineGroups();
 })();
 
-// ===== Settings: Profile Form =====
 const profileForm = document.getElementById('profile-form');
 
 profileForm?.addEventListener('submit', async (e) => {
@@ -965,7 +945,6 @@ profileForm?.addEventListener('submit', async (e) => {
   setTimeout(() => { successEl.hidden = true; }, 3000);
 });
 
-// ===== Settings: Reminders Toggle =====
 const remindersToggle = document.getElementById('reminders-enabled');
 
 remindersToggle?.addEventListener('change', async () => {
@@ -988,7 +967,6 @@ remindersToggle?.addEventListener('change', async () => {
   setTimeout(() => { successEl.hidden = true; }, 3000);
 });
 
-// ===== Settings: Change Password Form =====
 const passwordForm = document.getElementById('password-form');
 
 passwordForm?.addEventListener('submit', async (e) => {
@@ -1050,7 +1028,6 @@ passwordForm?.addEventListener('submit', async (e) => {
   setTimeout(() => { successEl.hidden = true; }, 3000);
 });
 
-// ===== Settings: Delete Account =====
 const deleteBtn = document.getElementById('delete-account-btn');
 const deleteModal = document.getElementById('delete-modal-overlay');
 const deleteConfirmInput = document.getElementById('delete-confirm-input');
@@ -1110,7 +1087,6 @@ confirmDeleteBtn?.addEventListener('click', async () => {
   window.location.href = '/login';
 });
 
-// ===== Settings: Pre-fill Profile Form =====
 (async function loadProfileSettings() {
   const nameInput = document.getElementById('display-name');
   if (!nameInput) return;
@@ -1138,7 +1114,6 @@ confirmDeleteBtn?.addEventListener('click', async () => {
   if (remindersToggleEl) remindersToggleEl.checked = profile.reminders_enabled;
 })();
 
-// ===== Route Protection =====
 const PUBLIC_PAGES = ['login.html', 'register.html', 'reset-password.html'];
 
 async function checkAuth() {
@@ -1177,7 +1152,6 @@ async function checkAuth() {
 
 checkAuth();
 
-// ===== Sidebar Log Out =====
 document.querySelectorAll('.sidebar-footer a').forEach(link => {
   link.addEventListener('click', async (e) => {
     e.preventDefault();
@@ -1186,7 +1160,6 @@ document.querySelectorAll('.sidebar-footer a').forEach(link => {
   });
 });
 
-// ===== Detect Password Recovery Session =====
 (async function handlePasswordRecovery() {
   const passwordFormEl = document.getElementById('password-form');
   if (!passwordFormEl) return;
