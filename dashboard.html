@@ -7,16 +7,13 @@
     <link rel="stylesheet" href="style.css">
     <link rel="icon" type="image/jpeg" href="/favicon.jpg">
 </head>
-    <script src="https://cdn.jsdelivr.net/npm/eruda"></script>
-    <script>eruda.init();</script>
 
 <body>
 
-    <!-- Mobile navigation menu -->
     <aside id="sidebar" aria-label="Main navigation">
 
         <div class="sidebar-header">
-            <a href="index.html" class="logo">StudyTrack</a>
+            <a href="/" class="logo">StudyTrack</a>
             <button type="button" id="close-menu" aria-label="Close navigation menu">
                 &times;
             </button>
@@ -24,17 +21,17 @@
 
         <nav>
             <ul>
-                <li><a href="index.html">Home</a></li>
-                <li><a href="dashboard.html" aria-current="page">Dashboard</a></li>
-                <li><a href="add-homework.html">Add Homework</a></li>
-                <li><a href="calendar.html">Calendar</a></li>
-                <li><a href="deadlines.html">Deadline Tracker</a></li>
-                <li><a href="settings.html">Settings</a></li>
+                <li><a href="/">Home</a></li>
+                <li><a href="/dashboard" aria-current="page">Dashboard</a></li>
+                <li><a href="/add-homework">Add Homework</a></li>
+                <li><a href="/calendar">Calendar</a></li>
+                <li><a href="/deadlines">Deadline Tracker</a></li>
+                <li><a href="/settings">Settings</a></li>
             </ul>
         </nav>
 
         <div class="sidebar-footer">
-            <a href="login.html">Log Out</a>
+            <a href="/login">Log Out</a>
         </div>
 
     </aside>
@@ -53,21 +50,19 @@
                 &#9776;
             </button>
 
-            <a href="index.html" class="logo">StudyTrack</a>
+            <a href="/" class="logo">StudyTrack</a>
 
-            <a href="settings.html" class="profile-link">
+            <a href="/settings" class="profile-link">
                 My Profile
             </a>
         </header>
 
-        <!-- Page introduction -->
         <section class="welcome-section">
             <p>YOUR PROGRESS AT A GLANCE</p>
             <h1>Dashboard</h1>
             <p>A summary of how you're keeping up with your homework.</p>
         </section>
 
-        <!-- Overall progress -->
         <section class="progress-section">
             <article class="progress-card">
                 <div class="progress-info">
@@ -85,7 +80,6 @@
             </article>
         </section>
 
-        <!-- Stat summary -->
         <section class="summary-section" aria-label="Homework summary">
 
             <article class="summary-card">
@@ -110,7 +104,6 @@
 
         </section>
 
-        <!-- Upcoming deadlines -->
         <section class="upcoming-section">
 
             <div class="section-heading">
@@ -119,11 +112,10 @@
                     <p>Assignments coming up soon.</p>
                 </div>
 
-                <a href="deadlines.html">View All Deadlines</a>
+                <a href="/deadlines">View All Deadlines</a>
             </div>
 
             <div id="upcoming-deadlines">
-                <!-- Populated by script.js -->
             </div>
 
             <div id="upcoming-empty-state" hidden>
@@ -133,7 +125,6 @@
 
         </section>
 
-        <!-- Breakdown by subject -->
         <section class="subject-breakdown-section">
 
             <div class="section-heading">
@@ -144,7 +135,6 @@
             </div>
 
             <div id="subject-breakdown">
-                <!-- Populated by script.js -->
             </div>
 
         </section>
@@ -154,7 +144,7 @@
         </footer>
 
     </main>
-    
+
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
     <script src="supabase-client.js"></script>
     <script src="script.js"></script>
