@@ -6,17 +6,14 @@
     <title>Settings | StudyTrack</title>
     <link rel="stylesheet" href="style.css">
     <link rel="icon" type="image/jpeg" href="/favicon.jpg">
-    <script src="https://cdn.jsdelivr.net/npm/eruda"></script>
-    <script>eruda.init();</script>
 </head>
 
 <body>
 
-    <!-- Mobile navigation menu -->
     <aside id="sidebar" aria-label="Main navigation">
 
         <div class="sidebar-header">
-            <a href="index.html" class="logo">StudyTrack</a>
+            <a href="/" class="logo">StudyTrack</a>
             <button type="button" id="close-menu" aria-label="Close navigation menu">
                 &times;
             </button>
@@ -24,17 +21,17 @@
 
         <nav>
             <ul>
-                <li><a href="index.html">Home</a></li>
-                <li><a href="dashboard.html">Dashboard</a></li>
-                <li><a href="add-homework.html">Add Homework</a></li>
-                <li><a href="calendar.html">Calendar</a></li>
-                <li><a href="deadlines.html">Deadline Tracker</a></li>
-                <li><a href="settings.html" aria-current="page">Settings</a></li>
+                <li><a href="/">Home</a></li>
+                <li><a href="/dashboard">Dashboard</a></li>
+                <li><a href="/add-homework">Add Homework</a></li>
+                <li><a href="/calendar">Calendar</a></li>
+                <li><a href="/deadlines">Deadline Tracker</a></li>
+                <li><a href="/settings" aria-current="page">Settings</a></li>
             </ul>
         </nav>
 
         <div class="sidebar-footer">
-            <a href="login.html">Log Out</a>
+            <a href="/login">Log Out</a>
         </div>
 
     </aside>
@@ -53,21 +50,19 @@
                 &#9776;
             </button>
 
-            <a href="index.html" class="logo">StudyTrack</a>
+            <a href="/" class="logo">StudyTrack</a>
 
-            <a href="settings.html" class="profile-link">
+            <a href="/settings" class="profile-link">
                 My Profile
             </a>
         </header>
 
-        <!-- Page introduction -->
         <section class="welcome-section">
             <p>YOUR ACCOUNT</p>
             <h1>Settings</h1>
             <p>Manage your profile, reminders, and account.</p>
         </section>
 
-        <!-- Profile -->
         <section class="settings-section">
             <div class="settings-card">
                 <h2>Profile</h2>
@@ -111,7 +106,6 @@
             </div>
         </section>
 
-        <!-- Reminders -->
         <section class="settings-section">
             <div class="settings-card">
                 <h2>Email Reminders</h2>
@@ -133,7 +127,6 @@
             </div>
         </section>
 
-        <!-- Change Password -->
         <section class="settings-section">
             <div class="settings-card">
                 <h2>Change Password</h2>
@@ -169,7 +162,6 @@
             </div>
         </section>
 
-        <!-- Delete Account -->
         <section class="settings-section">
             <div class="settings-card settings-card-danger">
                 <h2>Delete Account</h2>
@@ -185,7 +177,6 @@
             </div>
         </section>
 
-        <!-- Delete confirmation modal -->
         <div id="delete-modal-overlay" class="modal-overlay" hidden>
             <div class="modal-card" role="dialog" aria-labelledby="delete-modal-title" aria-modal="true">
                 <h3 id="delete-modal-title">Are you sure?</h3>
@@ -205,10 +196,9 @@
         </footer>
 
     </main>
-    
+
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
     <script src="supabase-client.js"></script>
     <script src="script.js"></script>
-
 </body>
 </html>
