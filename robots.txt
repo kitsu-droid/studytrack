@@ -1,17 +1,10 @@
 User-agent: *
-Allow: /$
-Allow: /login
-Allow: /register
-Allow: /reset-password
-Allow: /favicon.jpg
+Allow: /
 
-Disallow: /
 Disallow: /dashboard
 Disallow: /add-homework
 Disallow: /calendar
 Disallow: /deadlines
 Disallow: /settings
-Disallow: /style.css
-Disallow: /script.js
 
 Sitemap: https://studytrack-taupe.vercel.app/sitemap.xml
