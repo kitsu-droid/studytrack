@@ -7,4 +7,4 @@ Disallow: /calendar
 Disallow: /deadlines
 Disallow: /settings
 
-Sitemap: https://studytrack-taupe.vercel.app/sitemap.xml
+Sitemap: https://acadtrack-taupe.vercel.app/sitemap.xml
